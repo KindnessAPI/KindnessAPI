@@ -12,7 +12,8 @@
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
     "precommit": "npm run lint",
     "heroku-postbuild": "npm run build",
-    "deploy": "git add .; git commit -am \"heroku deploy\"; git push heroku master;"
+    "deploy": "git add .; git commit -am \"heroku deploy\"; npm run backup; git push heroku master;",
+    "backup": "git push -u origin master"
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.3.6",

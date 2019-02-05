@@ -1,5 +1,6 @@
 import firebase from 'firebase/app'
 import 'firebase/firestore'
+import 'firebase/auth'
 
 if (!firebase.apps.length) {
   const config = {
@@ -12,8 +13,9 @@ if (!firebase.apps.length) {
   }
   firebase.initializeApp(config)
 }
-const fireDb = firebase.firestore()
 
-export {
-  fireDb
+export const fireDb = firebase.firestore()
+
+export const loginGoogle = () => {
+
 }

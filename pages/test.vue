@@ -5,9 +5,13 @@
         Write to Firestore.
       </h2>
       <div>
-        <button @click="writeToFirestore" :disabled="writeSuccessful">
-          <span v-if="!writeSuccessful">Write now</span>
-          <span v-else>Successful!</span>
+        <button :disabled="writeSuccessful" @click="writeToFirestore">
+          <span v-if="!writeSuccessful">
+            Write now
+          </span>
+          <span v-else>
+            Successful!
+          </span>
         </button>
       </div>
     </div>
@@ -16,11 +20,15 @@
         Read from Firestore.
       </h2>
       <div>
-        <button @click="readFromFirestore" :disabled="readSuccessful">
-          <span v-if="!readSuccessful">Read now</span>
-          <span v-else>Successful!</span>
+        <button :disabled="readSuccessful" @click="readFromFirestore">
+          <span v-if="!readSuccessful">
+            Read now
+          </span>
+          <span v-else>
+            Successful!
+          </span>
         </button>
-        <p>{{text}}</p>
+        <p>{{ text }}</p>
       </div>
     </div>
   </section>
