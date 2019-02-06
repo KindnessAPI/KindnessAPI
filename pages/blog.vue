@@ -10,7 +10,7 @@ export default {
   components: {
   },
   beforeCreate () {
-    this.$parent.$emit('title', 'home')
+    this.$parent.$emit('title', 'blogs')
   }
 }
 </script>

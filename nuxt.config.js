@@ -3,6 +3,10 @@ const pkg = require('./package')
 module.exports = {
   mode: 'universal',
 
+  server: {
+    host: '0.0.0.0'
+  },
+
   /*
   ** Headers of the page
   */
@@ -14,7 +18,8 @@ module.exports = {
       { hid: 'description', name: 'description', content: 'Trying to make Kindness Popular with Rich Interactions and Visuals' }
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' }
     ]
   },
 
@@ -27,14 +32,16 @@ module.exports = {
   ** Global CSS
   */
   css: [
-    'iview/dist/styles/iview.css'
+    //'https://cdn.bootcss.com/material-design-icons/3.0.1/iconfont/material-icons.css'
+    // 'iview/dist/styles/iview.css'
   ],
 
   /*
   ** Plugins to load before mounting the App
   */
   plugins: [
-    '@/plugins/iview',
+    '@/plugins/muse-ui',
+    // '@/plugins/iview',
     '@/plugins/firebase'
   ],
 
