@@ -2,11 +2,11 @@ const express = require('express')
 const consola = require('consola')
 const { Nuxt, Builder } = require('nuxt')
 const app = express()
-
+const proxy = require('./proxy')
 // Import and Set Nuxt.js options
 const config = require('../nuxt.config.js')
 config.dev = !(process.env.NODE_ENV === 'production')
-
+const bodyParser = require('body-parser')
 async function start() {
   // Init Nuxt.js
   const nuxt = new Nuxt(config)
@@ -22,7 +22,11 @@ async function start() {
     await builder.build()
   }
 
+  app.use(bodyParser.json())
+
   // Give nuxt middleware to express
+  proxy.setup({ app })
+
   app.use(nuxt.render)
 
   // Listen the server

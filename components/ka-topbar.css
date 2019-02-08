@@ -1,0 +1,46 @@
+.ka-topbar{
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  border-radius: 20px;
+  width: calc(100% - 20px * 2);
+  background-color: white;
+  border: #e0e0e0 solid 1px;
+  border-radius: 20px 20px 20px 20px;
+  height: 45px;
+  box-shadow: 0px 0px 30px 0px rgb(211, 211, 211);
+}
+@media (min-width: 767px) {
+  .ka-topbar {
+    width: 600px;
+    left: calc(50% - (600px / 2));
+  }
+}
+@media (min-width: 959px) {
+  .ka-topbar {
+    width: 900px;
+    left: calc(50% - (900px / 2));
+  }
+}
+.ka-row-flex{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  width: calc(100% - 40px);
+  margin: 0px auto;
+  height: 100%;
+}
+.vertically-center{
+  display: flex;
+  align-items: center;
+}
+.ka-icon{
+  cursor: pointer;
+}
+.icon-div{
+  width: 29px;
+}
+.pointer{
+  cursor: pointer;
+}

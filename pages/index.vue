@@ -1,20 +1,59 @@
 <template>
-  <mu-container>
-
-  </mu-container>
+  <div class="full ka-main">
+    <KaTopBar v-if="!search.open" @menu="(v) => { menu.open = v }" @search="(v) => { search.open = v }"></KaTopBar>
+    <KaBottomSheet></KaBottomSheet>
+    <KaMenu :menu="menu.open" @menu="(v) => { menu.open = v }"></KaMenu>
+    <KaSearchOverlay :search="search.open" @search="(v) => { search.open = v }" ></KaSearchOverlay>
+    <KaSearchBar v-if="search.open" :search="search.open" @search="(v) => { search.open = v }" @query="(v) => { search.query = v }"></KaSearchBar>
+  </div>
 </template>
 
 <script>
+import * as iNet from '../plugins/inet.js'
+import KaBottomSheet from '../components/KaBottomSheet.vue'
+import KaTopBar from '../components/KaTopBar.vue'
+import KaMenu from '../components/KaMenu.vue'
+import KaSearchOverlay from '../components/KaSearchOverlay.vue'
+import KaSearchBar from '../components/KaSearchBar.vue'
 export default {
-  layout: 'panel',
+  layout: 'mobile',
   components: {
+    KaBottomSheet,
+    KaTopBar,
+    KaMenu,
+    KaSearchOverlay,
+    KaSearchBar
   },
+  data () {
+    return {
+      search: {
+        query: '',
+        open: false
+      },
+      menu: {
+        open: false
+      }
+    }
+  },
+  // async asyncData ({ isDev, route, store, env, params, query, req, res, redirect, error }) {
+  //   let resp = await iNet.getDataWithProxy({ url: `https://www.wonglok.com/quotes/?as=json&limit=100` })
+  //   return {
+  //     datame: resp.data
+  //   }
+  // },
   beforeCreate () {
     this.$parent.$emit('title', 'home')
   }
 }
 </script>
 
-<style lang="less">
-
+<style scoped>
+.full{
+  width: 100%;
+  height: 100%;
+}
+.ka-main{
+  position: relative;
+  overflow: hidden;
+}
 </style>

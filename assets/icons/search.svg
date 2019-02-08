@@ -1,0 +1,13 @@
+
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 49.3 (51167) - http://www.bohemiancoding.com/sketch -->
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="iPhone-6-Plus" transform="translate(-360.000000, -90.000000)" fill="#000000">
+            <g id="topbar" transform="translate(14.000000, 79.000000)">
+                <path d="M361.853,27.56 C360.17,29.077 357.942,30 355.5,30 C350.257,30 346,25.743 346,20.5 C346,15.257 350.257,11 355.5,11 C360.743,11 365,15.257 365,20.5 C365,22.942 364.077,25.17 362.56,26.853 L370,34.293 L369.293,35 L361.853,27.56 Z M355.5,12 C360.191,12 364,15.809 364,20.5 C364,25.191 360.191,29 355.5,29 C350.809,29 347,25.191 347,20.5 C347,15.809 350.809,12 355.5,12 Z" id="Shape"></path>
+            </g>
+        </g>
+    </g>
+</svg>

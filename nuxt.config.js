@@ -11,7 +11,7 @@ module.exports = {
   ** Headers of the page
   */
   head: {
-    title: 'Kindness API | Spread Kidness with APIs',
+    title: 'Kindness API | Spread Kidness with Technology',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -22,6 +22,9 @@ module.exports = {
       { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' }
     ]
   },
+
+  serverMiddleware: [
+  ],
 
   /*
   ** Customize the progress-bar color
@@ -41,6 +44,7 @@ module.exports = {
   */
   plugins: [
     '@/plugins/muse-ui',
+    '@/plugins/hammer',
     // '@/plugins/iview',
     '@/plugins/firebase'
   ],
@@ -63,6 +67,9 @@ module.exports = {
   ** Build configuration
   */
   build: {
+    hotMiddleware: {
+      reload: true
+    },
     /*
     ** You can extend webpack config here
     */

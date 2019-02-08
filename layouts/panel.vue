@@ -28,7 +28,7 @@
       </mu-list-item>
     </mu-list>
   </mu-drawer>
-  <nuxt @title="(v) => { title = v }" />
+  <nuxt @title="(v) => { title = v; collapse = true }" />
 </div>
 </template>
 
@@ -39,7 +39,7 @@ export default {
     return {
       title: '',
       theme: 'light',
-      collapse: true
+      collapse: false
     }
   },
   mounted () {
@@ -62,7 +62,7 @@ export default {
 <style lang="less">
 @import url('../assets/Geomanist-Regular-Webfont/stylesheet.css');
 @panelw: 256px;
-@collapsew: 56px;
+@collapsew: 0px;
 
 .page.is-collapse .mu-appbar-title{
   justify-content: center;
@@ -106,6 +106,7 @@ export default {
   }
 }
 .page-side-bar {
+  box-shadow: inset 0 0 20px 0px #d0d0d0;
   width: @panelw;
   transition: all .45s cubic-bezier(0.23, 1, 0.32, 1);
   .page.is-collapse & {
