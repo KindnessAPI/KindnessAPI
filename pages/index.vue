@@ -1,5 +1,8 @@
 <template>
   <div class="full ka-main">
+    <no-ssr>
+      <KaBackground></KaBackground>
+    </no-ssr>
     <KaTopBar v-if="!search.open" @menu="(v) => { menu.open = v }" @search="(v) => { search.open = v }"></KaTopBar>
     <KaBottomSheet></KaBottomSheet>
     <KaMenu :menu="menu.open" @menu="(v) => { menu.open = v }"></KaMenu>
@@ -15,6 +18,7 @@ import KaTopBar from '../components/KaTopBar.vue'
 import KaMenu from '../components/KaMenu.vue'
 import KaSearchOverlay from '../components/KaSearchOverlay.vue'
 import KaSearchBar from '../components/KaSearchBar.vue'
+import KaBackground from '../components/KaBackground.vue'
 export default {
   layout: 'mobile',
   components: {
@@ -22,7 +26,8 @@ export default {
     KaTopBar,
     KaMenu,
     KaSearchOverlay,
-    KaSearchBar
+    KaSearchBar,
+    KaBackground
   },
   data () {
     return {
