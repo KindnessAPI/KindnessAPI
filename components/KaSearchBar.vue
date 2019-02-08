@@ -59,7 +59,7 @@ export default {
   outline:none;
 }
 .search-div{
-  width: calc(80%);
+  width: calc(100% - 70px);
   height: 100%;
   margin: 0px auto;
 }

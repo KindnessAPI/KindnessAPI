@@ -33,7 +33,7 @@ varying vec3 vPos;
 
 void main (void) {
   vec3 newPos = position;
-  newPos = rotateZ(time + newPos.z * 1.5) * newPos;
+  newPos = rotateZ(time * 3.0 + newPos.z * 1.5) * newPos;
   vPos = position;
 
   vec4 mvPosition = modelViewMatrix * vec4(newPos, 1.0);

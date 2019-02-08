@@ -1,10 +1,9 @@
 <template>
   <div class="ka-aside" :class="{ 'ka-menu-open': menu }">
     <div class="ka-overlay" @click="$emit('menu', false)">
-      1243
     </div>
     <div class="ka-menu">
-      1243
+
     </div>
   </div>
 </template>

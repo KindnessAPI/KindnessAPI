@@ -7,17 +7,22 @@
 export default {
   data () {
     return {
+      home: false,
       ready: false
     }
   },
   mounted () {
     import('../gl/home/index.js').then((home) => {
+      this.home = home
       home.setup({ dom: this.$refs['insert'] })
       this.$nextTick(() => {
         this.ready = true
         this.$emit('ready', true)
       })
     })
+  },
+  beforeDestroy () {
+    this.home.clean()
   }
 }
 </script>
