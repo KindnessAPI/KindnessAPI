@@ -91,6 +91,7 @@ export const setup = ({ dom }) => {
   setupComposer()
 
   syncSize()
+  window.addEventListener('resize', syncSize)
 
   let waveAPI = wavy.getAPI({ scene, camera })
 
