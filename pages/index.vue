@@ -52,6 +52,15 @@ export default {
 }
 </script>
 
+<style lang="css">
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
+}
+</style>
+
 <style scoped>
 .full{
   width: 100%;
@@ -61,4 +70,5 @@ export default {
   position: relative;
   overflow: hidden;
 }
+
 </style>

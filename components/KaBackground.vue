@@ -1,17 +1,38 @@
 <template>
-  <div class="full" ref="insert">
+  <div class="full mounter" :class="{ fadeIn: ready }" ref="insert">
   </div>
 </template>
 
 <script>
-import * as home from '../gl/home/index.js'
 export default {
+  data () {
+    return {
+      ready: false
+    }
+  },
   mounted () {
-    home.setup({ dom: this.$refs['insert'] })
+    import('../gl/home/index.js').then((home) => {
+      home.setup({ dom: this.$refs['insert'] })
+      this.$nextTick(() => {
+        this.ready = true
+        this.$emit('ready', true)
+      })
+    })
   }
 }
 </script>
 
-<style>
-
+<style scoped>
+.mounter{
+  opacity: 0;
+  transition: opacity 1s;
+}
+.fadeIn.mounter{
+  opacity: 1;
+}
+.center-text{
+  text-align: center;
+  display: flex;
+  align-items: center;
+}
 </style>
