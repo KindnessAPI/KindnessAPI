@@ -23,7 +23,7 @@ export const setupObject = ({ scene, camera, gui, CONFIG }) => {
     var beta     = evt.beta / 180
     var gamma    = evt.gamma / 90
 
-    console.log(evt, alpha, beta, gamma)
+    // console.log(evt, alpha, beta, gamma)
     uniforms.accel.value.set(alpha, beta, gamma)
   }, true)
 

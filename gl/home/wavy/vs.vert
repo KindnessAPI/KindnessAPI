@@ -34,10 +34,10 @@ uniform vec3 accel;
 
 void main (void) {
   vec3 newPos = position;
-  newPos = rotateZ(time * 3.0 + newPos.z * 1.5) * newPos;
+  newPos = rotateZ(time * 3.0 + (1.0 + accel.y * 5.0) * newPos.z * 1.5) * newPos;
 
-  newPos = rotateX((accel.y - 0.14) * 2.0) * newPos;
-  newPos = rotateZ((accel.z) * 2.0) * newPos;
+  newPos = rotateZ((accel.y + 3.14) * -4.0) * newPos;
+//   newPos = rotateX((accel.y) * 2.0) * newPos;
 
   vPos = position;
 
