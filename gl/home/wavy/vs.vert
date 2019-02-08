@@ -30,10 +30,15 @@ mat3 rotateZ(float rad) {
 
 uniform float time;
 varying vec3 vPos;
+uniform vec3 accel;
 
 void main (void) {
   vec3 newPos = position;
   newPos = rotateZ(time * 3.0 + newPos.z * 1.5) * newPos;
+
+  newPos = rotateX((accel.y - 0.14) * 2.0) * newPos;
+  newPos = rotateZ((accel.z) * 2.0) * newPos;
+
   vPos = position;
 
   vec4 mvPosition = modelViewMatrix * vec4(newPos, 1.0);

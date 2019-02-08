@@ -15,7 +15,8 @@ import * as wavy from './wavy/wavy'
 import * as dat from 'dat.gui'
 
 var CONFIG = {
-  camPos: [0.00000905161650112143, -1.6328903203517724, 0.017842728918007384],
+  // camPos: [0.00000905161650112143, -1.6328903203517724, 0.017842728918007384],
+  camPos: [0, 0, 3],
   bgColor: 0x50505,
   bloomPass: {
     threshold: 0.00001,
@@ -49,7 +50,6 @@ var addColor = ({ gui, color }) => {
 var setupEditorGUI = ({ dom }) => {
   let visible = true
   gui = new dat.GUI({ name: 'home', autoPlace: visible })
-  // gui.useLocalStorage = false
 
   gui.add(bloomPass, 'threshold', 0, 1);
   gui.add(bloomPass, 'strength', 0, 10);
