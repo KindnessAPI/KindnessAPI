@@ -7,7 +7,7 @@
     <KaBottomSheet></KaBottomSheet>
     <KaMenu :menu="menu.open" @menu="(v) => { menu.open = v }"></KaMenu>
     <KaSearchOverlay :search="search.open" @search="(v) => { search.open = v }" ></KaSearchOverlay>
-    <KaSearchBar v-if="search.open" :search="search.open" @search="(v) => { search.open = v }" @query="(v) => { search.query = v }"></KaSearchBar>
+    <KaSearchBar v-show="search.open" :search="search.open" @search="(v) => { search.open = v }" @query="(v) => { search.query = v }"></KaSearchBar>
   </div>
 </template>
 

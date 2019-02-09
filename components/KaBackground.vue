@@ -12,7 +12,7 @@ export default {
     }
   },
   mounted () {
-    import('../gl/home/index.js').then((home) => {
+    import('../gl/vertexer/index.js').then((home) => {
       this.home = home
       home.setup({ dom: this.$refs['insert'] })
       this.$nextTick(() => {

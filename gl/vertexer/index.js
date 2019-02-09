@@ -11,13 +11,16 @@ import 'imports-loader?THREE=three!three/examples/js/postprocessing/UnrealBloomP
 
 import 'imports-loader?THREE=three!three/examples/js/controls/OrbitControls.js'
 
-import * as wavy from './wavy/wavy'
+import * as vertexer from './vertexer/vertexer'
 import * as dat from 'dat.gui'
 
 var CONFIG = {
+  edit: false,
   // camPos: [0.00000905161650112143, -1.6328903203517724, 0.017842728918007384],
-  camPos: [0, 0, 3],
+  camPos: [0, 0, 175],
   bgColor: 0x50505,
+
+  useComposer: false,
   bloomPass: {
     threshold: 0.00001,
     strength: 4.5,
@@ -129,7 +132,7 @@ var setupComposer = () => {
 }
 
 var run = () => {
-  let useBloom = true
+  let useBloom = CONFIG.useComposer
   if (useBloom && scene && camera && renderer && composer) {
     composer.render()
   } else if (scene && camera && renderer) {
@@ -140,10 +143,10 @@ var run = () => {
 export const setupGraph = ({ dom }) => {
   // objects
   graph = graph || {}
-  graph.waveAPI = wavy.getAPI({ scene, camera, gui, CONFIG })
+  graph.vertexer = vertexer.getAPI({ dom, renderer, scene, camera, gui, CONFIG })
   return {
     runAll: () => {
-      graph.waveAPI.render()
+      graph.vertexer.render()
     }
   }
 }
@@ -157,7 +160,7 @@ export const setup = ({ dom }) => {
   // sync once
   syncSizeHandler()
 
-  // setupEditorGUI({ dom })
+  CONFIG.edit && setupEditorGUI({ dom })
 
   let runners = setupGraph({ dom })
 
