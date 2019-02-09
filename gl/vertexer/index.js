@@ -15,8 +15,8 @@ import * as wavy from './wavy/wavy'
 import * as dat from 'dat.gui'
 
 var CONFIG = {
-  camPos: [0.00000905161650112143, -1.6328903203517724, 0.017842728918007384],
-  // camPos: [0, 0, 3],
+  // camPos: [0.00000905161650112143, -1.6328903203517724, 0.017842728918007384],
+  camPos: [0, 0, 3],
   bgColor: 0x50505,
   bloomPass: {
     threshold: 0.00001,
