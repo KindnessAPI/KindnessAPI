@@ -1,3 +1,6 @@
+precision highp float;
+precision highp sampler2D;
+
 uniform float time;
 uniform sampler2D tIdx;
 
@@ -31,7 +34,7 @@ mat3 rotateZ(float rad) {
     );
 }
 
-void main()	{
+void main ()	{
   vec2 cellSize = 1.0 / resolution.xy;
   vec2 newCell = gl_FragCoord.xy;
   vec2 uv = newCell * cellSize;
@@ -44,20 +47,20 @@ void main()	{
   float squareIDX = idx.y;
   float totalPoints = idx.z;
 
-  float lineNums = 512.0;
+  float lineNums = 500.0;
   float stackIDX = floor(squareIDX / lineNums);
   float lineIDX = mod(squareIDX, lineNums);
 
-  if (lineIDX > lineNums) {
-    lineIDX = lineNums;
+  if (lineIDX > 300.0) {
+    isInvalid = true;
   }
-  if (stackIDX > lineNums) {
-    stackIDX = lineNums;
+  if (stackIDX > 500.0) {
+    isInvalid = true;
   }
 
-  float sX = 0.1;
-  float sY = 0.2;
-  float gapX = 45.0;
+  float sX = 0.3;
+  float sY = 0.3;
+  float gapX = 20.0 * 1.0 / sX;
   float gapY = 0.0;
 
   float w = sX * (2.0 + gapX);
@@ -108,10 +111,11 @@ void main()	{
   pos.z += sin(time  + pX * piz * 0.333) * 50.0;
 
   if (isInvalid) {
-    pos.xyzw = vec4(0.0);
+    pos.w = 0.0;
+    discard;
   } else {
     pos.w = 1.0;
+    gl_FragColor = pos;
   }
 
-  gl_FragColor = pos;
 }

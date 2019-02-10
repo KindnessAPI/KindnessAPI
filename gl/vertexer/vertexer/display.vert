@@ -1,6 +1,6 @@
 #include <common>
 uniform sampler2D tPos;
-uniform sampler2D tIdx;
+// uniform sampler2D tIdx;
 
 varying vec3 v_tt;
 
@@ -9,7 +9,7 @@ void main() {
 
   // position is changed to host uv vals
   vec4 tt = texture2D(tPos, position.xy);
-  vec4 idx = texture2D(tIdx, position.xy);
+  // vec4 idx = texture2D(tIdx, position.xy);
 
   v_tt = normalize(tt.xyz);
 

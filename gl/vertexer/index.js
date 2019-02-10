@@ -15,7 +15,7 @@ import * as vertexer from './vertexer/vertexer'
 import * as dat from 'dat.gui'
 
 var CONFIG = {
-  edit: true,
+  edit: true && !(process.env.NODE_ENV === 'production'),
   // camPos: [0.00000905161650112143, -1.6328903203517724, 0.017842728918007384],
   // camPos: [0, 0, 175],
   camPos: [28.049177549945217, -52.33509106908894, 99.76553066576534],
@@ -25,7 +25,7 @@ var CONFIG = {
   bloomPass: {
     threshold: 0.00001,
     // strength: 4.5,
-    strength: 1.06,
+    strength: 2.3,
     radius: 1.0
   }
 }
