@@ -34,23 +34,6 @@ mat3 rotateZ(float rad) {
     );
 }
 
-mat3 rotateQ (vec3 axis, float rad) {
-    float hr = rad / 2.0;
-    float s = sin( hr );
-    vec4 q = vec4(axis * s, cos( hr ));
-    vec3 q2 = q.xyz + q.xyz;
-    vec3 qq2 = q.xyz * q2;
-    vec2 qx = q.xx * q2.yz;
-    float qy = q.y * q2.z;
-    vec3 qw = q.w * q2.xyz;
-
-    return mat3(
-        1.0 - (qq2.y + qq2.z),  qx.x - qw.z,            qx.y + qw.y,
-        qx.x + qw.z,            1.0 - (qq2.x + qq2.z),  qy - qw.x,
-        qx.y - qw.y,            qy + qw.x,              1.0 - (qq2.x + qq2.y)
-    );
-}
-
 void main ()	{
   vec2 cellSize = 1.0 / resolution.xy;
   vec2 newCell = gl_FragCoord.xy;
@@ -124,7 +107,7 @@ void main ()	{
 
   float piz = 0.01 * 2.0 * 3.14159265;
 
-  pos.xyz = rotateQ(normalize(vec3(1.0, 1.0, 1.0)), time + pY * piz) * rotateZ(time + pY * piz) * pos.xyz;
+  pos.xyz = rotateZ(time + pY * piz) * pos.xyz;
   pos.z += sin(time  + pX * piz * 0.333) * 50.0;
 
   if (isInvalid) {
