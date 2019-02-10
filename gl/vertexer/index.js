@@ -17,8 +17,8 @@ import * as dat from 'dat.gui'
 var CONFIG = {
   edit: true && !(process.env.NODE_ENV === 'production'),
   // camPos: [0.00000905161650112143, -1.6328903203517724, 0.017842728918007384],
-  // camPos: [0, 0, 175],
-  camPos: [28.049177549945217, -52.33509106908894, 99.76553066576534],
+  // camPos: [0, 0, 275],
+  camPos: [-104.3833662396361, -43.47055640302386, 131.35355500288483],
   bgColor: 0x50505,
 
   useComposer: true,
