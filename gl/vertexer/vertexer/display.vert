@@ -1,14 +1,19 @@
 #include <common>
 uniform sampler2D tPos;
+uniform sampler2D tIdx;
+
+varying vec3 v_tt;
 
 void main() {
-  vec3 newPos = position;
+  // vec3 newPos = vec3(1.0);
 
-  vec4 tt = texture2D(tPos, vec2(uv.x, uv.y / 30.0));
+  // position is changed to host uv vals
+  vec4 tt = texture2D(tPos, position.xy);
+  vec4 idx = texture2D(tIdx, position.xy);
 
-  newPos.y += sin(tt.y / 10.0) * 50.0;
+  v_tt = normalize(tt.xyz);
 
-  vec4 mvPosition = modelViewMatrix * vec4(newPos, 1.0);
+  vec4 mvPosition = modelViewMatrix * tt;
   vec4 outputPos = projectionMatrix * mvPosition;
 
   gl_Position = outputPos;

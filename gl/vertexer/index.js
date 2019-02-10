@@ -15,15 +15,17 @@ import * as vertexer from './vertexer/vertexer'
 import * as dat from 'dat.gui'
 
 var CONFIG = {
-  edit: false,
+  edit: true,
   // camPos: [0.00000905161650112143, -1.6328903203517724, 0.017842728918007384],
-  camPos: [0, 0, 175],
+  // camPos: [0, 0, 175],
+  camPos: [28.049177549945217, -52.33509106908894, 99.76553066576534],
   bgColor: 0x50505,
 
-  useComposer: false,
+  useComposer: true,
   bloomPass: {
     threshold: 0.00001,
-    strength: 4.5,
+    // strength: 4.5,
+    strength: 1.06,
     radius: 1.0
   }
 }
@@ -77,7 +79,7 @@ var setupCamera = () => {
   let fov = 75
   let aspect = size.width / size.height
   let near = 0.1
-  let far = 1000
+  let far = 10000
 
   camera = new THREE.PerspectiveCamera(fov, aspect, near, far)
   camera.position.fromArray(CONFIG.camPos)
