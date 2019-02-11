@@ -43,8 +43,8 @@ void main ()	{
 
   bool isInvalid = false;
 
-  float vertexIDX = idx.x;
   float squareIDX = idx.y;
+  float subVertexIDX = idx.x;
   float totalPoints = idx.z;
 
   float lineNums = 500.0;
@@ -60,6 +60,7 @@ void main ()	{
 
   float sX = 0.3;
   float sY = 0.3;
+
   float gapX = 20.0 * 1.0 / sX;
   float gapY = 0.0;
 
@@ -70,27 +71,27 @@ void main ()	{
   float offsetY = (h * stackIDX);
   float offsetZ = (0.0);
 
-  if (vertexIDX == 0.0) {
+  if (subVertexIDX == 0.0) {
     pos.x = 1.0 * sX;
     pos.y = 1.0 * sY;
     pos.z = 0.0;
-  } else if (vertexIDX == 1.0) {
+  } else if (subVertexIDX == 1.0) {
     pos.x = -1.0 * sX;
     pos.y = 1.0 * sY;
     pos.z = 0.0;
-  } else if (vertexIDX == 2.0) {
+  } else if (subVertexIDX == 2.0) {
     pos.x = -1.0 * sX;
     pos.y = -1.0 * sY;
     pos.z = 0.0;
-  } else if (vertexIDX == 3.0) {
+  } else if (subVertexIDX == 3.0) {
     pos.x = 1.0 * sX;
     pos.y = 1.0 * sY;
     pos.z = 0.0;
-  } else if (vertexIDX == 4.0) {
+  } else if (subVertexIDX == 4.0) {
     pos.x = -1.0 * sX;
     pos.y = -1.0 * sY;
     pos.z = 0.0;
-  } else if (vertexIDX == 5.0) {
+  } else if (subVertexIDX == 5.0) {
     pos.x = 1.0 * sX;
     pos.y = -1.0 * sY;
     pos.z = 0.0;

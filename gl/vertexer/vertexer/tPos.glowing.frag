@@ -71,8 +71,12 @@ void main ()	{
   if (lineIDX > 300.0) {
     isInvalid = true;
   }
-  if (stackIDX > 500.0) {
+  if (stackIDX > 300.0) {
     isInvalid = true;
+  }
+  if (isInvalid) {
+    discard;
+    return;
   }
 
   float sX = 0.3;

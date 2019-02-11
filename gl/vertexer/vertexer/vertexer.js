@@ -7,7 +7,8 @@ export const makeAPI = ({ renderer, scene, camera, gui, CONFIG }) => {
   var api = {}
   var WIDTH = 1024;
   var gpuCompute = new GPUComputationRenderer(WIDTH, WIDTH, renderer)
-  var posDynamic = gpuCompute.createTexture();
+
+  // pos IDX
   var posIdx = gpuCompute.createTexture();
   var slot = posIdx.image.data;
   var p = 0;
@@ -22,6 +23,7 @@ export const makeAPI = ({ renderer, scene, camera, gui, CONFIG }) => {
     }
   }
 
+  var posDynamic = gpuCompute.createTexture();
   var posVar = gpuCompute.addVariable('tPos', require('raw-loader!./tPos.glowing.frag'), posDynamic );
   posVar.material.uniforms.tIdx = { value: posIdx };
   posVar.material.uniforms.time = { value: 0 };
