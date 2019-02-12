@@ -21,6 +21,10 @@ export default {
     return {
     }
   },
+  mounted () {
+    let img = new Image()
+    img.src = require('../assets/icons/search.svg')
+  },
   methods: {
   }
 }

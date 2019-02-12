@@ -50,93 +50,169 @@ mat3 rotateQ (vec3 axis, float rad) {
         qx.y - qw.y,            qy + qw.x,              1.0 - (qq2.x + qq2.y)
     );
 }
+const float PI = 3.1415926535897932384626433832795;
+const float PI_2 = 1.57079632679489661923;
+const float PI_4 = 0.785398163397448309616;
 
-void main ()	{
+mat4 scale(float x, float y, float z){
+    return mat4(
+        vec4(x,   0.0, 0.0, 0.0),
+        vec4(0.0, y,   0.0, 0.0),
+        vec4(0.0, 0.0, z,   0.0),
+        vec4(0.0, 0.0, 0.0, 1.0)
+    );
+}
+
+mat4 translate(float x, float y, float z){
+    return mat4(
+        vec4(1.0, 0.0, 0.0, 0.0),
+        vec4(0.0, 1.0, 0.0, 0.0),
+        vec4(0.0, 0.0, 1.0, 0.0),
+        vec4(x,   y,   z,   1.0)
+    );
+}
+
+mat4 RotateX(float phi){
+    return mat4(
+        vec4(1.,0.,0.,0),
+        vec4(0.,cos(phi),-sin(phi),0.),
+        vec4(0.,sin(phi),cos(phi),0.),
+        vec4(0.,0.,0.,1.));
+}
+
+mat4 RotateY(float theta){
+    return mat4(
+        vec4(cos(theta),0.,-sin(theta),0),
+        vec4(0.,1.,0.,0.),
+        vec4(sin(theta),0.,cos(theta),0.),
+        vec4(0.,0.,0.,1.));
+}
+
+mat4 RotateZ(float psi){
+    return mat4(
+        vec4(cos(psi),-sin(psi),0.,0),
+        vec4(sin(psi),cos(psi),0.,0.),
+        vec4(0.,0.,1.,0.),
+        vec4(0.,0.,0.,1.));
+}
+struct Square {
+  float xID;
+  float yID;
+  float xSize;
+  float ySize;
+  bool shouldSkipRender;
+  vec4 vertex;
+};
+
+Square assembleSquaresIntoPlane (vec2 plane, vec2 gap)  {
+  bool shouldSkipRender = false;
   vec2 cellSize = 1.0 / resolution.xy;
   vec2 newCell = gl_FragCoord.xy;
   vec2 uv = newCell * cellSize;
-  vec4 pos = texture2D(tPos, uv);
+  vec4 oldPos = texture2D(tPos, uv);
   vec4 idx = texture2D(tIdx, uv);
 
-  bool isInvalid = false;
-
-  float vertexIDX = idx.x;
+  float vertexID = idx.w;
+  float squareVertexID = idx.x;
   float squareIDX = idx.y;
   float totalPoints = idx.z;
 
-  float lineNums = 500.0;
-  float stackIDX = floor(squareIDX / lineNums);
-  float lineIDX = mod(squareIDX, lineNums);
-
-  if (lineIDX > 300.0) {
-    isInvalid = true;
+  vec4 pos = vec4(0.0);
+  float dimension = 368.0;
+  float stackIDX = floor(squareIDX / dimension);
+  float lineIDX = mod(squareIDX, dimension);
+  if (lineIDX > dimension) {
+    shouldSkipRender = true;
   }
-  if (stackIDX > 300.0) {
-    isInvalid = true;
-  }
-  if (isInvalid) {
-    discard;
-    return;
+  if (stackIDX > dimension) {
+    shouldSkipRender = true;
   }
 
-  float sX = 0.3;
-  float sY = 0.3;
-  float gapX = 20.0 * 1.0 / sX;
-  float gapY = 0.0;
+  float planeWidth = plane.x;
+  float planeHeight = plane.y;
 
-  float w = sX * (2.0 + gapX);
-  float h = sY * (2.0 + gapY);
+  float w = planeWidth * (2.0 + gap.x);
+  float h = planeHeight * (2.0 + gap.y);
 
-  float offsetX = (w * lineIDX);
-  float offsetY = (h * stackIDX);
-  float offsetZ = (0.0);
+  float offsetX = (w * lineIDX) - (w * dimension * 0.5);
+  float offsetY = (h * stackIDX) - (h * dimension * 0.5);
+  vec3 offsetXYZ = vec3(offsetX, offsetY, 0.0);
 
-  if (vertexIDX == 0.0) {
-    pos.x = 1.0 * sX;
-    pos.y = 1.0 * sY;
+  if (squareVertexID == 0.0) {
+    pos.x = 1.0 * planeWidth;
+    pos.y = 1.0 * planeHeight;
     pos.z = 0.0;
-  } else if (vertexIDX == 1.0) {
-    pos.x = -1.0 * sX;
-    pos.y = 1.0 * sY;
+  } else if (squareVertexID == 1.0) {
+    pos.x = -1.0 * planeWidth;
+    pos.y = 1.0 * planeHeight;
     pos.z = 0.0;
-  } else if (vertexIDX == 2.0) {
-    pos.x = -1.0 * sX;
-    pos.y = -1.0 * sY;
+  } else if (squareVertexID == 2.0) {
+    pos.x = -1.0 * planeWidth;
+    pos.y = -1.0 * planeHeight;
     pos.z = 0.0;
-  } else if (vertexIDX == 3.0) {
-    pos.x = 1.0 * sX;
-    pos.y = 1.0 * sY;
+  } else if (squareVertexID == 3.0) {
+    pos.x = 1.0 * planeWidth;
+    pos.y = 1.0 * planeHeight;
     pos.z = 0.0;
-  } else if (vertexIDX == 4.0) {
-    pos.x = -1.0 * sX;
-    pos.y = -1.0 * sY;
+  } else if (squareVertexID == 4.0) {
+    pos.x = -1.0 * planeWidth;
+    pos.y = -1.0 * planeHeight;
     pos.z = 0.0;
-  } else if (vertexIDX == 5.0) {
-    pos.x = 1.0 * sX;
-    pos.y = -1.0 * sY;
+  } else if (squareVertexID == 5.0) {
+    pos.x = 1.0 * planeWidth;
+    pos.y = -1.0 * planeHeight;
     pos.z = 0.0;
   } else {
-    isInvalid = true;
+    shouldSkipRender = true;
   }
 
-  pos.y += offsetY;
-  pos.x += offsetX;
-  pos.z += offsetZ;
+  pos.xyz += offsetXYZ;
 
+  Square square = Square(lineIDX, stackIDX, dimension, dimension, shouldSkipRender, pos);
+
+  return square;
+}
+
+
+void main ()	{
+  //------ START READING ME --------
+  vec2 planeSize = vec2(
+    1.0, // width
+    0.33 // height
+  );
+  vec2 gapSize = vec2(
+    5.0, // x Gap
+    0.0 // y Gap
+  );
+
+  Square info = assembleSquaresIntoPlane(planeSize, gapSize);
+  float xID = info.yID;
+  float yID = info.xID;
+  float xSize = info.xSize;
+  float ySize = info.ySize;
+  vec4 pos = info.vertex;
+  bool shouldSkipRender = info.shouldSkipRender;
+
+  // // Make a Shape!
+  // vec3 xyzAxis = normalize(vec3(3.0, 1.0, 2.0));
+  // const float twoSamllPies = 0.01 * 2.0 * 3.1415926535897932384626433832795;
+  // pos.xyz = rotateQ(xyzAxis, pos.y * twoSamllPies * sin(time)) * pos.xyz;
+
+
+  // go crazy
   float pX = pos.x;
   float pY = pos.y;
-
   float piz = 0.01 * 2.0 * 3.14159265;
-
   pos.xyz = rotateQ(normalize(vec3(1.0, 1.0, 1.0)), time + pY * piz) * rotateZ(time + pY * piz) * pos.xyz;
   pos.z += sin(time  + pX * piz * 0.333) * 50.0;
 
-  if (isInvalid) {
-    pos.w = 0.0;
+  // ------ STOP READING ME ------
+
+  if (shouldSkipRender) {
     discard;
+    return;
   } else {
     pos.w = 1.0;
     gl_FragColor = pos;
   }
-
 }

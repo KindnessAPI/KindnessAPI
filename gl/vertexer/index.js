@@ -18,14 +18,20 @@ var CONFIG = {
   edit: true && !(process.env.NODE_ENV === 'production'),
   // camPos: [0.00000905161650112143, -1.6328903203517724, 0.017842728918007384],
   // camPos: [0, 0, 275],
-  camPos: [70.6803230191502, 126.7125806507623, -401.1762804647324],
+  camPos: [-128.25260300180648, -187.13927469115663, -179.79203414429605],
+  // camPos: [70.6803230191502, 126.7125806507623, -401.1762804647324],
   bgColor: 0x50505,
 
   useComposer: true,
+  // bloomPass: {
+  //   threshold: 0.00001,
+  //   // strength: 4.5,
+  //   strength: 2.3,
+  //   radius: 1.0
+  // },
   bloomPass: {
-    threshold: 0.00001,
-    // strength: 4.5,
-    strength: 2.3,
+    threshold: 0.27,
+    strength: 0.74,
     radius: 1.0
   }
 }
@@ -71,7 +77,11 @@ var setupEditorGUI = ({ dom }) => {
   }, 1000 / 60)
 
   window.addEventListener('cleanup-gl', () => {
-    gui.destroy()
+    try {
+      gui.destroy()
+    } catch (e) {
+      console.log('err destorying gui tool', e)
+    }
   })
 }
 

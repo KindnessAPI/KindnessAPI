@@ -17,8 +17,8 @@ export const makeAPI = ({ renderer, scene, camera, gui, CONFIG }) => {
       let id = p / 4;
       slot[p + 0] = id % 6; // slot idx
       slot[p + 1] = Math.floor(id / 6); // vertex idx
-      slot[p + 2] = Math.floor(WIDTH * WIDTH / 4.0 / 6.0); // point idx
-      slot[p + 3] = 0;
+      slot[p + 2] = Math.floor(WIDTH * WIDTH / 4.0 / 6.0); // total
+      slot[p + 3] = id;
       p += 4;
     }
   }
