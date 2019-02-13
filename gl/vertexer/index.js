@@ -17,8 +17,8 @@ import * as dat from 'dat.gui'
 var CONFIG = {
   edit: true && !(process.env.NODE_ENV === 'production'),
   // camPos: [0.00000905161650112143, -1.6328903203517724, 0.017842728918007384],
-  // camPos: [0, 0, 275],
-  camPos: [-128.25260300180648, -187.13927469115663, -179.79203414429605],
+  camPos: [0.0, 0.0, -92.02815636422251],
+  // camPos: [-128.25260300180648, -187.13927469115663, -179.79203414429605],
   // camPos: [70.6803230191502, 126.7125806507623, -401.1762804647324],
   bgColor: 0x50505,
 
@@ -29,9 +29,14 @@ var CONFIG = {
   //   strength: 2.3,
   //   radius: 1.0
   // },
+  // bloomPass: {
+  //   threshold: 0.27,
+  //   strength: 0.74,
+  //   radius: 1.0
+  // },
   bloomPass: {
-    threshold: 0.27,
-    strength: 0.74,
+    threshold: 0.17,
+    strength: 2.36,
     radius: 1.0
   }
 }
@@ -69,6 +74,8 @@ var setupEditorGUI = ({ dom }) => {
   addColor({ gui, color: scene.background })
 
   var control = new THREE.OrbitControls(camera, dom)
+  control.enableDamping = true
+  control.enableKeys = false
   control.addEventListener('change', () => {
     console.log(`${camera.position.x}, ${camera.position.y}, ${camera.position.z}`)
   })

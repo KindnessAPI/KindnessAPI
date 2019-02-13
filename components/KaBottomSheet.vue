@@ -51,6 +51,8 @@ export default {
   transform: translateY(calc(100% - 75px));
   transition: transform 1s 0s, box-shadow 0.75s;
   transition-timing-function: cubic-bezier(0.075, 0.82, 0.165, 1);
+  box-shadow: 0px 0px 30px 0px rgb(211, 211, 211);
+
   border-bottom: none;
 }
 @media (min-width: 767px) {
@@ -80,7 +82,7 @@ export default {
   cursor: pointer;
 }
 .ka-bottom-sheet:hover{
-  box-shadow: 0px 0px 30px 0px rgb(211, 211, 211);
+  /* box-shadow: 0px 0px 30px 0px rgb(211, 211, 211); */
 }
 .ka-bottom-sheet.ka-open-sheet {
   transform: translateY(calc(0px));
