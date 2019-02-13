@@ -345,10 +345,14 @@ Sphere assembleSquaresIntoSphere (vec2 plane)  {
   float squareIDX = idx.y;
   float totalPoints = idx.z;
 
-  float r1 = random(vec2(squareIDX + 0.1)) - 0.5;
-  float r2 = random(vec2(squareIDX + 0.2)) - 0.5;
-  float r3 = random(vec2(squareIDX + 0.3)) - 0.5;
-  vec4 pos = vec4(vec3(r1, r2, r3), 1.0);
+  float r1 = random(vec2(squareIDX + 0.11)) - 0.5;
+  float r2 = random(vec2(squareIDX + 0.12)) - 0.5;
+  float r3 = random(vec2(squareIDX + 0.13)) - 0.5;
+  vec4 pos = vec4(vec3(r1, r2, r3), 0.0);
+
+  if (squareIDX > 1024.0 * 7.5) {
+    shouldSkipRender = true;
+  }
 
   float az = 1.0;
   float el = 1.0;
@@ -408,8 +412,6 @@ void main ()	{
   float pZ = pos.z;
   float piz = 0.01 * 2.0 * 3.14159265;
   float noiser = pattern(pos.xy * piz * 3.0);
-
-
 
   // pos = scale(20.0, 20.0, 20.0) * pos;
   // pos.z += pattern(pos.xy * piz * 3.0) * 40.0;
