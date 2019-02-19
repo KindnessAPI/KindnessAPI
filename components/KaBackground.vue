@@ -12,12 +12,13 @@ export default {
     }
   },
   mounted () {
-    import('../gl/vertexer/index.js').then((home) => {
+    import('../gl/audio/index.js').then((home) => {
       this.home = home
       home.setup({ dom: this.$refs['insert'] })
       this.$nextTick(() => {
         this.ready = true
         this.$emit('ready', true)
+        this.$emit('api', home)
       })
     })
   },

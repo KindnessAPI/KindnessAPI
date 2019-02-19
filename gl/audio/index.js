@@ -11,14 +11,13 @@ import 'imports-loader?THREE=three!three/examples/js/postprocessing/UnrealBloomP
 
 import 'imports-loader?THREE=three!three/examples/js/controls/OrbitControls.js'
 
-import * as vertexer from './vertexer/vertexer'
+import * as visualiser from './visualiser/visualiser.js'
 import * as dat from 'dat.gui'
 
 var CONFIG = {
   edit: true && !(process.env.NODE_ENV === 'production'),
   // camPos: [0.00000905161650112143, -1.6328903203517724, 0.017842728918007384],
-  // camPos: [0.0, 0.0, -92.02815636422251],
-  camPos: [-85.23506346665306, -13.71229184681604, 90.66518192907391],
+  camPos: [0.0, 0.0, -92.02815636422251],
   // camPos: [-128.25260300180648, -187.13927469115663, -179.79203414429605],
   // camPos: [70.6803230191502, 126.7125806507623, -401.1762804647324],
   bgColor: 0x50505,
@@ -42,7 +41,7 @@ var CONFIG = {
   }
 }
 
-var renderer, composer, size, scene, camera, rAFID, dpi, gui, graph, bloomPass
+var renderer, composer, size, scene, camera, rAFID, dpi, gui, graph, bloomPass, runners
 
 var syncSizeHandler = () => {
   composer.setSize(size.width * dpi, size.height * dpi)
@@ -163,13 +162,20 @@ var run = () => {
 export const setupGraph = ({ dom }) => {
   // objects
   graph = graph || {}
-  graph.vertexer = vertexer.getAPI({ dom, renderer, scene, camera, gui, CONFIG })
+  graph.visualiser = visualiser.getAPI({ dom, renderer, scene, camera, gui, CONFIG })
   return {
+    getGraph: () => {
+      return graph
+    },
     runAll: () => {
-      graph.vertexer.render()
+      graph.visualiser.render()
+    },
+    onInit: ({ url }) => {
+      graph.visualiser.onInit({ url })
     }
   }
 }
+
 export const setup = ({ dom }) => {
   setupWindowResize({ dom })
   setupRenderer({ dom })
@@ -182,7 +188,7 @@ export const setup = ({ dom }) => {
 
   CONFIG.edit && setupEditorGUI({ dom })
 
-  let runners = setupGraph({ dom })
+  runners = setupGraph({ dom })
 
   function loop () {
     rAFID = window.requestAnimationFrame(loop)
@@ -190,6 +196,10 @@ export const setup = ({ dom }) => {
     run()
   }
   rAFID = window.requestAnimationFrame(loop)
+}
+
+export const onInit = ({ url }) => {
+  runners.onInit({ url })
 }
 
 export const clean = () => {
