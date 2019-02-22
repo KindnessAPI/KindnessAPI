@@ -1,12 +1,15 @@
 import * as THREE from 'three'
 // import 'imports-loader?THREE=three!three/examples/js/GPUComputationRenderer.js'
 import GPUComputationRenderer from '../../shared/GPGPU.js'
-import * as auau from '../audio/audio.js'
+import * as mp3 from '../audio/mp3.js'
+import * as mic from '../audio/mic.js'
 
 /* eslint-enable */
 export const makeAPI = ({ renderer, scene, camera, gui, CONFIG }) => {
   var api = {
-    audio: false
+    audio: false,
+    mp3: false,
+    mic: false
   }
   var WIDTH = 1024;
   var gpuCompute = new GPUComputationRenderer(WIDTH, WIDTH, renderer)
@@ -20,7 +23,7 @@ export const makeAPI = ({ renderer, scene, camera, gui, CONFIG }) => {
       let id = p / 4;
       slot[p + 0] = id % 6; // square 1 / 6 index
       slot[p + 1] = Math.floor(id / 6); // square
-      slot[p + 2] = Math.pow((WIDTH * WIDTH) / 6.0); // total
+      slot[p + 2] = (WIDTH * WIDTH) / 6.0; // total
       slot[p + 3] = id;
       p += 4;
     }
@@ -90,11 +93,18 @@ export const makeAPI = ({ renderer, scene, camera, gui, CONFIG }) => {
     gpuCompute.compute()
   }
 
-  api.onInit = ({ url }) => {
+  api.onPlay = ({ url }) => {
     if (api.audio) {
       api.audio.pause()
     }
-    api.audio = auau.setup({ url })
+    api.audio = mp3.setup({ url })
+  }
+
+  api.onMic = () => {
+    if (api.audio) {
+      api.audio.pause()
+    }
+    api.audio = mic.setup({})
   }
 
   return api

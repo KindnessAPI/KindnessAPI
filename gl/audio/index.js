@@ -11,7 +11,7 @@ import 'imports-loader?THREE=three!three/examples/js/postprocessing/UnrealBloomP
 
 import 'imports-loader?THREE=three!three/examples/js/controls/OrbitControls.js'
 
-import * as visualiser from './visualiser/visualiser.js'
+import * as viz from './visualiser/visualiser.js'
 import * as dat from 'dat.gui'
 
 var Settings = require('./settings.json');
@@ -153,16 +153,13 @@ var run = () => {
 export const setupGraph = ({ dom }) => {
   // objects
   graph = graph || {}
-  graph.visualiser = visualiser.getAPI({ dom, renderer, scene, camera, gui, Settings })
+  graph.viz = viz.getAPI({ dom, renderer, scene, camera, gui, Settings })
   return {
     getGraph: () => {
       return graph
     },
     runAll: () => {
-      graph.visualiser.render()
-    },
-    onInit: ({ url }) => {
-      graph.visualiser.onInit({ url })
+      graph.viz.render()
     }
   }
 }
@@ -189,8 +186,8 @@ export const setup = ({ dom }) => {
   rAFID = window.requestAnimationFrame(loop)
 }
 
-export const onInit = ({ url }) => {
-  runners.onInit({ url })
+export const getGraph = () => {
+  return runners.getGraph()
 }
 
 export const clean = () => {

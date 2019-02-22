@@ -252,14 +252,9 @@ struct GeoReader {
   vec4 position;
   vec4 indexer;
   bool shouldSkipRender;
-
-  float vertexID;
-  float squareVertexID;
-  float squareIDX;
-  float totalSquares;
 };
 
-GeoReader getReader () {
+GeoReader GetGeoReader () {
   bool shouldSkipRender = false;
   vec2 cellSize = 1.0 / resolution.xy;
   vec2 newCell = gl_FragCoord.xy;
@@ -267,12 +262,12 @@ GeoReader getReader () {
   vec4 oldPos = texture2D(tPos, uv);
   vec4 idx = texture2D(tIdx, uv);
 
-  float vertexID = idx.w;
-  float squareVertexID = idx.x;
-  float squareIDX = idx.y;
-  float totalSquares = idx.z;
+  // float vertexID = idx.w;
+  // float squareVertexID = idx.x;
+  // float squareIDX = idx.y;
+  // float totalSquares = idx.z;
 
-  return GeoReader(oldPos, idx, shouldSkipRender, vertexID, squareVertexID, squareIDX, totalSquares);
+  return GeoReader(oldPos, idx, shouldSkipRender);
 }
 
 struct Square {
@@ -284,7 +279,7 @@ struct Square {
   vec4 vertex;
 };
 
-Square assembleSquaresIntoPlane (GeoReader reader, vec2 plane, vec2 gap)  {
+Square GetPlane (GeoReader reader, vec2 plane, vec2 gap)  {
   // bool shouldSkipRender = false;
   // vec2 cellSize = 1.0 / resolution.xy;
   // vec2 newCell = gl_FragCoord.xy;
@@ -307,7 +302,7 @@ Square assembleSquaresIntoPlane (GeoReader reader, vec2 plane, vec2 gap)  {
   // float totalSquares = idx.z;
 
   vec4 pos = vec4(0.0);
-  float dimension = 368.0;
+  float dimension = pow(idx.z, 0.5);
   float stackIDX = floor(squareIDX / dimension);
   float lineIDX = mod(squareIDX, dimension);
 
@@ -364,20 +359,10 @@ struct Sphere {
   bool shouldSkipRender;
   vec4 idx;
   vec4 vertex;
-  // float maxSquares;
   vec3 sphereIDX;
 };
 
-float cubeRoot (float n)
-{
-    float x = 1.0;
-    for(int i=0; i<10; i++) {
-        x = (2.0*x + n / (x*x)) / 3.0;
-    }
-    return x;
-}
-
-Sphere assembleSquaresIntoSphere (GeoReader reader, vec2 rect)  {
+Sphere GetSphere (GeoReader reader, vec2 rect)  {
   bool shouldSkipRender = reader.shouldSkipRender;
   vec4 idx = reader.indexer;
 
@@ -385,7 +370,7 @@ Sphere assembleSquaresIntoSphere (GeoReader reader, vec2 rect)  {
   float squareVertexID = idx.x;
   float squareIDX = idx.y;
 
-  float totalSquares = ((1024.0 * 1024.0) / 6.0);
+  float totalSquares = idx.z;
 
   float dimension = pow(totalSquares, 1.0 / 3.0);
   float cubeID = mod(squareIDX, dimension);
@@ -455,7 +440,7 @@ struct Audio {
   float amount;
 };
 
-Audio getAnoise (GeoReader reader) {
+Audio GetAudio (GeoReader reader) {
   vec4 idx = reader.indexer;
   float vertexID = idx.w;
   float squareVertexID = idx.x;
@@ -463,7 +448,7 @@ Audio getAnoise (GeoReader reader) {
   float totalSquares = idx.z;
 
   vec2 audioTextureDimension = vec2(
-    (1024.0 * 1024.0) / 6.0,
+    totalSquares,
     1.0
   );
   vec2 audioUV = vec2(mod(squareIDX, audioTextureDimension.x), 0.0) / audioTextureDimension;
@@ -475,25 +460,25 @@ Audio getAnoise (GeoReader reader) {
 }
 
 void main ()	{
-  GeoReader reader = getReader();
+  GeoReader reader = GetGeoReader();
 
   // -------
-  Audio audio = getAnoise(reader);
+  Audio audio = GetAudio(reader);
   float amount = audio.amount;
   float range = audio.range;
 
   //------ START READING ME --------
   vec2 planeSize = vec2(
-    0.01, // width
-    1.0 + 3.5 * amount // height
+    0.03333333 + amount, // width
+    0.03333333 // height
   );
   vec2 gapSize = vec2(
     0.0, // width
-    0.0 // height
+    0.3 // height
   );
 
-  // Square info = assembleSquaresIntoPlane(reader, planeSize, gapSize);
-  Sphere info = assembleSquaresIntoSphere(reader, planeSize);
+  Square info = GetPlane(reader, planeSize, gapSize);
+  // Sphere info = GetSphere(reader, planeSize);
   vec4 pos = info.vertex;
   // float xVal = info.xID / info.xSize;
   // float yVal = info.yID / info.ySize;
@@ -504,13 +489,18 @@ void main ()	{
   float pX = pos.x;
   float pY = pos.y;
   float pZ = pos.z;
+
   float piz = 0.01 * 2.0 * 3.14159265;
 
-  // float noiser = pattern(info.sphereIDX.xy * 3.0 * info.sphereIDX.zx) * 30.0;
+  // float sx = pattern(time + info.sphereIDX.xx);
+  // float sy = pattern(time + info.sphereIDX.yy);
+  // float sz = pattern(time + info.sphereIDX.zz);
 
-
+  pos.xyz = rotateZ(pX * piz) * pos.xyz;
   pos.xyz = rotateQ(normalize(vec3(1.0, 1.0, 1.0)) * rotateZ(time + pY * piz), time + pY * piz) * pos.xyz;
-  // pos += scale(s, s, s) * pos;
+
+
+  // pos += scale(amount, amount, amount) * pos;
 
   // ------ STOP READING ME ------
 

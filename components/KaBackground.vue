@@ -7,23 +7,23 @@
 export default {
   data () {
     return {
-      home: false,
+      api: false,
       ready: false
     }
   },
   mounted () {
-    import('../gl/audio/index.js').then((home) => {
-      this.home = home
-      home.setup({ dom: this.$refs['insert'] })
+    import('../gl/audio/index.js').then((api) => {
+      this.api = api
+      api.setup({ dom: this.$refs['insert'] })
       this.$nextTick(() => {
         this.ready = true
         this.$emit('ready', true)
-        this.$emit('api', home)
+        this.$emit('api', api)
       })
     })
   },
   beforeDestroy () {
-    this.home.clean()
+    this.api.clean()
   }
 }
 </script>

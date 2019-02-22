@@ -13,7 +13,8 @@
     "precommit": "npm run lint",
     "heroku-postbuild": "npm run build",
     "deploy": "git add .; git commit -am \"heroku deploy\"; npm run backup; git push heroku master;",
-    "backup": "git push -u origin master"
+    "backup": "git push -u origin master",
+    "ssl": "local-ssl-proxy --source 9001 --target 3000"
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.3.6",

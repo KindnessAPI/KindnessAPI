@@ -4,7 +4,8 @@
       <KaBackground @api="(v) => { api = v; }"></KaBackground>
     </no-ssr>
     <div class="pos-abs">
-      <button @click="onChoose">Choose</button>
+      <button @click="onChoose">Mp3 Player</button>
+      <button @click="onMic">Mic</button>
     </div>
   </div>
 </template>
@@ -22,18 +23,22 @@ export default {
     }
   },
   methods: {
+    onMic () {
+      console.log(this.api)
+      if (this.api.getGraph().viz) {
+        this.api.getGraph().viz.onMic({})
+      }
+    },
     onChoose () {
       let fileInput = document.createElement('input')
       fileInput.type = 'file'
       fileInput.onchange = () => {
-        this.onInit({ url: URL.createObjectURL(fileInput.files[0]) })
+        let ob = { url: URL.createObjectURL(fileInput.files[0]) }
+        if (this.api.getGraph().viz) {
+          this.api.getGraph().viz.onPlay(ob)
+        }
       }
       fileInput.click()
-    },
-    onInit ({ url }) {
-      if (this.api) {
-        this.api.onInit({ url })
-      }
     }
   }
 }
