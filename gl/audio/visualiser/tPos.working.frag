@@ -256,7 +256,7 @@ struct GeoReader {
   float vertexID;
   float squareVertexID;
   float squareIDX;
-  float totalPoints;
+  float totalSquares;
 };
 
 GeoReader getReader () {
@@ -270,9 +270,9 @@ GeoReader getReader () {
   float vertexID = idx.w;
   float squareVertexID = idx.x;
   float squareIDX = idx.y;
-  float totalPoints = idx.z;
+  float totalSquares = idx.z;
 
-  return GeoReader(oldPos, idx, shouldSkipRender, vertexID, squareVertexID, squareIDX, totalPoints);
+  return GeoReader(oldPos, idx, shouldSkipRender, vertexID, squareVertexID, squareIDX, totalSquares);
 }
 
 struct Square {
@@ -299,17 +299,18 @@ Square assembleSquaresIntoPlane (GeoReader reader, vec2 plane, vec2 gap)  {
   float vertexID = idx.w;
   float squareVertexID = idx.x;
   float squareIDX = idx.y;
-  float totalPoints = idx.z;
+  float totalSquares = idx.z;
 
   // float vertexID = idx.w;
   // float squareVertexID = idx.x;
   // float squareIDX = idx.y;
-  // float totalPoints = idx.z;
+  // float totalSquares = idx.z;
 
   vec4 pos = vec4(0.0);
   float dimension = 368.0;
   float stackIDX = floor(squareIDX / dimension);
   float lineIDX = mod(squareIDX, dimension);
+
   if (squareIDX > dimension * dimension) {
     shouldSkipRender = true;
   }
@@ -364,6 +365,7 @@ struct Sphere {
   vec4 idx;
   vec4 vertex;
   // float maxSquares;
+  vec3 sphereIDX;
 };
 
 float cubeRoot (float n)
@@ -375,67 +377,75 @@ float cubeRoot (float n)
     return x;
 }
 
-Sphere assembleSquaresIntoSphere (GeoReader reader, vec2 plane)  {
+Sphere assembleSquaresIntoSphere (GeoReader reader, vec2 rect)  {
   bool shouldSkipRender = reader.shouldSkipRender;
   vec4 idx = reader.indexer;
 
   float vertexID = idx.w;
   float squareVertexID = idx.x;
   float squareIDX = idx.y;
-  float totalPoints = idx.z;
 
-  // float maxSquares = 1024.0 * 16.0;
+  float totalSquares = ((1024.0 * 1024.0) / 6.0);
 
-  float dimension = 1024.0;
-  float stackIDX = floor(squareIDX / dimension);
-  float lineIDX = mod(squareIDX, dimension);
+  float dimension = pow(totalSquares, 1.0 / 3.0);
+  float cubeID = mod(squareIDX, dimension);
 
-  // float r1 = random(vec2(squareIDX + 0.1)) - 0.5;
-  // float r2 = random(vec2(squareIDX + 0.2)) - 0.5;
-  // float r3 = random(vec2(squareIDX + 0.3)) - 0.5;
+  float xx = mod(cubeID * pow(dimension, 0.0), dimension);
+  float yy = mod(cubeID * pow(dimension, 1.0), dimension);
+  float zz = mod(cubeID * pow(dimension, 2.0), dimension);
 
-  float r1 = stackIDX;
-  float r2 = lineIDX;
-  float r3 = (random(vec2(stackIDX, lineIDX)) - 0.5) * dimension;
+  vec3 finalXYZ = vec3(xx, yy, zz);
 
-  vec4 pos = vec4(normalize(vec3(r1, r2, r3)) - 0.5, 0.0);
+  float adjustToCenter = dimension * -0.5;
+  finalXYZ += adjustToCenter;
+
+  float changeTo = 1.0 / dimension;
+  finalXYZ *= changeTo;
+
+  vec4 offset = vec4(finalXYZ, 1.0) * 50.0;
 
   float az = 0.0;
   float el = 0.0;
+  vec3 virtualBall = vec3(offset.xyz);
+  toBall(virtualBall, az, el);
 
-  vec3 noiser = vec3(pos.xyz);
-  toBall(noiser, az, el);
+  // if (squareIDX > totalSquares * 0.33333) {
+  //   shouldSkipRender = true;
+  // }
+
+  vec4 pos = vec4(0.0);
 
   if (squareVertexID == 0.0) {
-    pos.x = 1.0 * plane.x; //Width;
-    pos.y = 1.0 * plane.y; //Height;
+    pos.x = 1.0 * rect.x; //Width;
+    pos.y = 1.0 * rect.y; //Height;
     pos.z = 0.0;
   } else if (squareVertexID == 1.0) {
-    pos.x = -1.0 * plane.x; //Width;
-    pos.y = 1.0 * plane.y; //Height;
+    pos.x = -1.0 * rect.x; //Width;
+    pos.y = 1.0 * rect.y; //Height;
     pos.z = 0.0;
   } else if (squareVertexID == 2.0) {
-    pos.x = -1.0 * plane.x; //Width;
-    pos.y = -1.0 * plane.y; //Height;
+    pos.x = -1.0 * rect.x; //Width;
+    pos.y = -1.0 * rect.y; //Height;
     pos.z = 0.0;
   } else if (squareVertexID == 3.0) {
-    pos.x = 1.0 * plane.x; //Width;
-    pos.y = 1.0 * plane.y; //Height;
+    pos.x = 1.0 * rect.x; //Width;
+    pos.y = 1.0 * rect.y; //Height;
     pos.z = 0.0;
   } else if (squareVertexID == 4.0) {
-    pos.x = -1.0 * plane.x; //Width;
-    pos.y = -1.0 * plane.y; //Height;
+    pos.x = -1.0 * rect.x; //Width;
+    pos.y = -1.0 * rect.y; //Height;
     pos.z = 0.0;
   } else if (squareVertexID == 5.0) {
-    pos.x = 1.0 * plane.x; //Width;
-    pos.y = -1.0 * plane.y; //Height;
+    pos.x = 1.0 * rect.x; //Width;
+    pos.y = -1.0 * rect.y; //Height;
     pos.z = 0.0;
   } else {
     shouldSkipRender = true;
   }
 
   pos.xyz += fromBall(50.0, az, el);
-  Sphere sphere = Sphere(shouldSkipRender, idx, pos);
+
+  Sphere sphere = Sphere(shouldSkipRender, idx, pos, finalXYZ);
 
   return sphere;
 }
@@ -450,10 +460,10 @@ Audio getAnoise (GeoReader reader) {
   float vertexID = idx.w;
   float squareVertexID = idx.x;
   float squareIDX = idx.y;
-  float totalPoints = idx.z;
+  float totalSquares = idx.z;
 
   vec2 audioTextureDimension = vec2(
-    1024.0 * 5.0,
+    (1024.0 * 1024.0) / 6.0,
     1.0
   );
   vec2 audioUV = vec2(mod(squareIDX, audioTextureDimension.x), 0.0) / audioTextureDimension;
@@ -474,11 +484,11 @@ void main ()	{
 
   //------ START READING ME --------
   vec2 planeSize = vec2(
-    0.05, // width
-    1.05 // height
+    0.01, // width
+    1.0 + 3.5 * amount // height
   );
   vec2 gapSize = vec2(
-    3.0, // width
+    0.0, // width
     0.0 // height
   );
 
@@ -495,15 +505,12 @@ void main ()	{
   float pY = pos.y;
   float pZ = pos.z;
   float piz = 0.01 * 2.0 * 3.14159265;
-  // float noiser = pattern(pos.xy * piz * 3.0);
 
-  // pos = scale(20.0, 20.0, 20.0) * pos;
-  // pos.z += pattern(pos.xy * piz * 3.0) * 40.0;
-  // pos.xyz = rotateX(15.0 * piz) * pos.xyz;
+  // float noiser = pattern(info.sphereIDX.xy * 3.0 * info.sphereIDX.zx) * 30.0;
 
-  float s = amount * (range + 1.0);
-  pos.xyz = rotateQ(normalize(vec3(1.0, 1.0, 1.0)), time + pY * piz) * rotateZ(time + pY * piz) * pos.xyz;
-  pos += scale(s, s, s) * pos * 0.3;
+
+  pos.xyz = rotateQ(normalize(vec3(1.0, 1.0, 1.0)) * rotateZ(time + pY * piz), time + pY * piz) * pos.xyz;
+  // pos += scale(s, s, s) * pos;
 
   // ------ STOP READING ME ------
 

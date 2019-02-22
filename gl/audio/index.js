@@ -14,13 +14,23 @@ import 'imports-loader?THREE=three!three/examples/js/controls/OrbitControls.js'
 import * as visualiser from './visualiser/visualiser.js'
 import * as dat from 'dat.gui'
 
-var CONFIG = require('./settings.json');
-window.COPY_ME = () => {
-  CONFIG.camPos = [camera.position.x, camera.position.y, camera.position.z]
-  // CONFIG.bloomPass =
-  return CONFIG
+var Settings = require('./settings.json');
+Settings.edit = true && !(process.env.NODE_ENV === 'production')
+
+window.SAVE_SETTINGS_AUDIO_VIZ = () => {
+  Settings.camPos = [
+    camera.position.x, camera.position.y, camera.position.z
+  ]
+  Settings.bloomPass = {
+    threshold: bloomPass.threshold,
+    strength: bloomPass.strength,
+    radius: bloomPass.radius
+  }
+  Settings.bgColor = scene.background.getHex()
+  console.log(JSON.stringify(Settings, null, '  ').replace(new RegExp(`"`, 'ig'), ''))
+  return Settings
 };
-CONFIG.edit = true && !(process.env.NODE_ENV === 'production')
+
 
 var renderer, composer, size, scene, camera, rAFID, dpi, gui, graph, bloomPass, runners
 
@@ -80,7 +90,7 @@ var setupCamera = () => {
   let far = 10000
 
   camera = new THREE.PerspectiveCamera(fov, aspect, near, far)
-  camera.position.fromArray(CONFIG.camPos)
+  camera.position.fromArray(Settings.camPos)
   camera.lookAt(0,0,0)
 }
 
@@ -97,7 +107,7 @@ var setupRenderer = ({ dom }) => {
 
 var setupScene = () => {
   scene = new THREE.Scene()
-  scene.background = new THREE.Color(CONFIG.bgColor)
+  scene.background = new THREE.Color(Settings.bgColor)
 }
 
 var setupWindowResize = ({ dom }) => {
@@ -123,16 +133,16 @@ var setupComposer = () => {
   bloomPass = new THREE.UnrealBloomPass(new THREE.Vector2(size.width * dpi, size.height * dpi), 1.5, 0.4, 0.85)
   bloomPass.renderToScreen = true
 
-  bloomPass.threshold = CONFIG.bloomPass.threshold
-  bloomPass.strength = CONFIG.bloomPass.strength
-  bloomPass.radius = CONFIG.bloomPass.radius
+  bloomPass.threshold = Settings.bloomPass.threshold
+  bloomPass.strength = Settings.bloomPass.strength
+  bloomPass.radius = Settings.bloomPass.radius
 
   composer.addPass(renderBG)
   composer.addPass(bloomPass)
 }
 
 var run = () => {
-  let useBloom = CONFIG.useComposer
+  let useBloom = Settings.useComposer
   if (useBloom && scene && camera && renderer && composer) {
     composer.render()
   } else if (scene && camera && renderer) {
@@ -143,7 +153,7 @@ var run = () => {
 export const setupGraph = ({ dom }) => {
   // objects
   graph = graph || {}
-  graph.visualiser = visualiser.getAPI({ dom, renderer, scene, camera, gui, CONFIG })
+  graph.visualiser = visualiser.getAPI({ dom, renderer, scene, camera, gui, Settings })
   return {
     getGraph: () => {
       return graph
@@ -167,7 +177,7 @@ export const setup = ({ dom }) => {
   // sync once
   syncSizeHandler()
 
-  CONFIG.edit && setupEditorGUI({ dom })
+  Settings.edit && setupEditorGUI({ dom })
 
   runners = setupGraph({ dom })
 

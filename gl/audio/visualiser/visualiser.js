@@ -20,7 +20,7 @@ export const makeAPI = ({ renderer, scene, camera, gui, CONFIG }) => {
       let id = p / 4;
       slot[p + 0] = id % 6; // square 1 / 6 index
       slot[p + 1] = Math.floor(id / 6); // square
-      slot[p + 2] = Math.floor(WIDTH * WIDTH / 4.0 / 6.0); // total
+      slot[p + 2] = Math.pow((WIDTH * WIDTH) / 6.0); // total
       slot[p + 3] = id;
       p += 4;
     }
