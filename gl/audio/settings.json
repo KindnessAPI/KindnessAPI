@@ -1,0 +1,15 @@
+{
+  "edit": true,
+  "camPos": [
+    -27.03176169053,
+    -58.30040049488529,
+    -65.87509943704161
+  ],
+  "bgColor": 0,
+  "useComposer": true,
+  "bloomPass": {
+    "threshold": 0.1,
+    "strength": 1.4,
+    "radius": 1
+  }
+}

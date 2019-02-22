@@ -363,7 +363,7 @@ struct Sphere {
   bool shouldSkipRender;
   vec4 idx;
   vec4 vertex;
-  float maxSquares;
+  // float maxSquares;
 };
 
 float cubeRoot (float n)
@@ -384,18 +384,21 @@ Sphere assembleSquaresIntoSphere (GeoReader reader, vec2 plane)  {
   float squareIDX = idx.y;
   float totalPoints = idx.z;
 
-  float maxSquares = 1024.0 * 16.0;
+  // float maxSquares = 1024.0 * 16.0;
 
-  float dimension = 10.0;
-  float r1 = random(vec2(squareIDX + 0.1)) - 0.5;
-  float r2 = random(vec2(squareIDX + 0.2)) - 0.5;
-  float r3 = random(vec2(squareIDX + 0.3)) - 0.5;
+  float dimension = 1024.0;
+  float stackIDX = floor(squareIDX / dimension);
+  float lineIDX = mod(squareIDX, dimension);
+
+  // float r1 = random(vec2(squareIDX + 0.1)) - 0.5;
+  // float r2 = random(vec2(squareIDX + 0.2)) - 0.5;
+  // float r3 = random(vec2(squareIDX + 0.3)) - 0.5;
+
+  float r1 = stackIDX;
+  float r2 = lineIDX;
+  float r3 = (random(vec2(stackIDX, lineIDX)) - 0.5) * dimension;
 
   vec4 pos = vec4(normalize(vec3(r1, r2, r3)) - 0.5, 0.0);
-
-  if (squareIDX > maxSquares) {
-    shouldSkipRender = true;
-  }
 
   float az = 0.0;
   float el = 0.0;
@@ -432,7 +435,7 @@ Sphere assembleSquaresIntoSphere (GeoReader reader, vec2 plane)  {
   }
 
   pos.xyz += fromBall(50.0, az, el);
-  Sphere sphere = Sphere(shouldSkipRender, idx, pos, maxSquares);
+  Sphere sphere = Sphere(shouldSkipRender, idx, pos);
 
   return sphere;
 }
@@ -492,13 +495,15 @@ void main ()	{
   float pY = pos.y;
   float pZ = pos.z;
   float piz = 0.01 * 2.0 * 3.14159265;
-  float noiser = pattern(pos.xy * piz * 3.0);
+  // float noiser = pattern(pos.xy * piz * 3.0);
 
   // pos = scale(20.0, 20.0, 20.0) * pos;
   // pos.z += pattern(pos.xy * piz * 3.0) * 40.0;
   // pos.xyz = rotateX(15.0 * piz) * pos.xyz;
 
+  float s = amount * (range + 1.0);
   pos.xyz = rotateQ(normalize(vec3(1.0, 1.0, 1.0)), time + pY * piz) * rotateZ(time + pY * piz) * pos.xyz;
+  pos += scale(s, s, s) * pos * 0.3;
 
   // ------ STOP READING ME ------
 
