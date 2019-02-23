@@ -270,6 +270,36 @@ GeoReader GetGeoReader () {
   return GeoReader(oldPos, idx, shouldSkipRender);
 }
 
+void toPrimitive (inout vec2 rect, inout vec4 pos, float squareVertexID, inout bool shouldSkipRender) {
+  if (squareVertexID == 0.0) {
+    pos.x = 1.0 * rect.x; //Width;
+    pos.y = 1.0 * rect.y; //Height;
+    pos.z = 0.0;
+  } else if (squareVertexID == 1.0) {
+    pos.x = -1.0 * rect.x; //Width;
+    pos.y = 1.0 * rect.y; //Height;
+    pos.z = 0.0;
+  } else if (squareVertexID == 2.0) {
+    pos.x = -1.0 * rect.x; //Width;
+    pos.y = -1.0 * rect.y; //Height;
+    pos.z = 0.0;
+  } else if (squareVertexID == 3.0) {
+    pos.x = 1.0 * rect.x; //Width;
+    pos.y = 1.0 * rect.y; //Height;
+    pos.z = 0.0;
+  } else if (squareVertexID == 4.0) {
+    pos.x = -1.0 * rect.x; //Width;
+    pos.y = -1.0 * rect.y; //Height;
+    pos.z = 0.0;
+  } else if (squareVertexID == 5.0) {
+    pos.x = 1.0 * rect.x; //Width;
+    pos.y = -1.0 * rect.y; //Height;
+    pos.z = 0.0;
+  } else {
+    shouldSkipRender = true;
+  }
+}
+
 struct Square {
   float xID;
   float yID;
@@ -280,13 +310,6 @@ struct Square {
 };
 
 Square GetPlane (GeoReader reader, vec2 plane, vec2 gap)  {
-  // bool shouldSkipRender = false;
-  // vec2 cellSize = 1.0 / resolution.xy;
-  // vec2 newCell = gl_FragCoord.xy;
-  // vec2 uv = newCell * cellSize;
-  // vec4 oldPos = texture2D(tPos, uv);
-  // vec4 idx = texture2D(tIdx, uv);
-
   bool shouldSkipRender = reader.shouldSkipRender;
   vec4 idx = reader.indexer;
   vec4 oldPos = reader.position;
@@ -295,11 +318,6 @@ Square GetPlane (GeoReader reader, vec2 plane, vec2 gap)  {
   float squareVertexID = idx.x;
   float squareIDX = idx.y;
   float totalSquares = idx.z;
-
-  // float vertexID = idx.w;
-  // float squareVertexID = idx.x;
-  // float squareIDX = idx.y;
-  // float totalSquares = idx.z;
 
   vec4 pos = vec4(0.0);
   float dimension = pow(idx.z, 0.5);
@@ -320,33 +338,7 @@ Square GetPlane (GeoReader reader, vec2 plane, vec2 gap)  {
   float offsetY = (h * stackIDX) - (h * dimension * 0.5);
   vec3 offsetXYZ = vec3(offsetX, offsetY, 0.0);
 
-  if (squareVertexID == 0.0) {
-    pos.x = 1.0 * planeWidth;
-    pos.y = 1.0 * planeHeight;
-    pos.z = 0.0;
-  } else if (squareVertexID == 1.0) {
-    pos.x = -1.0 * planeWidth;
-    pos.y = 1.0 * planeHeight;
-    pos.z = 0.0;
-  } else if (squareVertexID == 2.0) {
-    pos.x = -1.0 * planeWidth;
-    pos.y = -1.0 * planeHeight;
-    pos.z = 0.0;
-  } else if (squareVertexID == 3.0) {
-    pos.x = 1.0 * planeWidth;
-    pos.y = 1.0 * planeHeight;
-    pos.z = 0.0;
-  } else if (squareVertexID == 4.0) {
-    pos.x = -1.0 * planeWidth;
-    pos.y = -1.0 * planeHeight;
-    pos.z = 0.0;
-  } else if (squareVertexID == 5.0) {
-    pos.x = 1.0 * planeWidth;
-    pos.y = -1.0 * planeHeight;
-    pos.z = 0.0;
-  } else {
-    shouldSkipRender = true;
-  }
+  toPrimitive(plane, pos, squareVertexID, shouldSkipRender);
 
   pos.xyz += offsetXYZ;
 
@@ -354,6 +346,7 @@ Square GetPlane (GeoReader reader, vec2 plane, vec2 gap)  {
 
   return square;
 }
+
 
 struct Sphere {
   bool shouldSkipRender;
@@ -400,33 +393,7 @@ Sphere GetSphere (GeoReader reader, vec2 rect)  {
 
   vec4 pos = vec4(0.0);
 
-  if (squareVertexID == 0.0) {
-    pos.x = 1.0 * rect.x; //Width;
-    pos.y = 1.0 * rect.y; //Height;
-    pos.z = 0.0;
-  } else if (squareVertexID == 1.0) {
-    pos.x = -1.0 * rect.x; //Width;
-    pos.y = 1.0 * rect.y; //Height;
-    pos.z = 0.0;
-  } else if (squareVertexID == 2.0) {
-    pos.x = -1.0 * rect.x; //Width;
-    pos.y = -1.0 * rect.y; //Height;
-    pos.z = 0.0;
-  } else if (squareVertexID == 3.0) {
-    pos.x = 1.0 * rect.x; //Width;
-    pos.y = 1.0 * rect.y; //Height;
-    pos.z = 0.0;
-  } else if (squareVertexID == 4.0) {
-    pos.x = -1.0 * rect.x; //Width;
-    pos.y = -1.0 * rect.y; //Height;
-    pos.z = 0.0;
-  } else if (squareVertexID == 5.0) {
-    pos.x = 1.0 * rect.x; //Width;
-    pos.y = -1.0 * rect.y; //Height;
-    pos.z = 0.0;
-  } else {
-    shouldSkipRender = true;
-  }
+  toPrimitive(rect, pos, squareVertexID, shouldSkipRender);
 
   pos.xyz += fromBall(50.0, az, el);
 
@@ -497,8 +464,8 @@ void main ()	{
   // float sz = pattern(time + info.sphereIDX.zz);
 
   pos.xyz = rotateZ(pX * piz) * pos.xyz;
-  pos.xyz = rotateQ(normalize(vec3(1.0, 1.0, 1.0)) * rotateZ(time + pY * piz), time + pY * piz) * pos.xyz;
-
+  // pos.xyz = rotateQ(normalize(vec3(1.0, 1.0, 1.0)) * rotateZ(time + pY * piz), time + pY * piz) * pos.xyz;
+  pos.xyz = rotateQ(normalize(vec3(1.0, 1.0, 1.0)), time + pX * piz) * rotateZ(time + pY * piz) * pos.xyz;
 
   // pos += scale(amount, amount, amount) * pos;
 
