@@ -1,74 +1,53 @@
 <template>
-  <div class="full ka-main">
+  <div class="full">
     <no-ssr>
-      <KaBackground></KaBackground>
+      <KaBackground @api="(v) => { api = v; }"></KaBackground>
     </no-ssr>
-    <KaTopBar v-if="!search.open" @menu="(v) => { menu.open = v }" @search="(v) => { search.open = v }"></KaTopBar>
-    <KaBottomSheet></KaBottomSheet>
-    <KaMenu :menu="menu.open" @menu="(v) => { menu.open = v }"></KaMenu>
-    <KaSearchOverlay :search="search.open" @search="(v) => { search.open = v }" ></KaSearchOverlay>
-    <KaSearchBar v-if="search.open" :search="search.open" @search="(v) => { search.open = v }" @query="(v) => { search.query = v }"></KaSearchBar>
+    <div class="pos-abs">
+      <button @click="onChoose">Mp3 Player</button>
+      <button @click="onMic">Mic</button>
+    </div>
   </div>
 </template>
 
 <script>
-import * as iNet from '../plugins/inet.js'
-import KaBottomSheet from '../components/KaBottomSheet.vue'
-import KaTopBar from '../components/KaTopBar.vue'
-import KaMenu from '../components/KaMenu.vue'
-import KaSearchOverlay from '../components/KaSearchOverlay.vue'
-import KaSearchBar from '../components/KaSearchBar.vue'
 import KaBackground from '../components/KaBackground.vue'
+
 export default {
-  layout: 'mobile',
   components: {
-    KaBottomSheet,
-    KaTopBar,
-    KaMenu,
-    KaSearchOverlay,
-    KaSearchBar,
     KaBackground
   },
   data () {
     return {
-      search: {
-        query: '',
-        open: false
-      },
-      menu: {
-        open: false
-      }
+      api: false
     }
   },
-  // async asyncData ({ isDev, route, store, env, params, query, req, res, redirect, error }) {
-  //   let resp = await iNet.getDataWithProxy({ url: `https://www.wonglok.com/quotes/?as=json&limit=100` })
-  //   return {
-  //     datame: resp.data
-  //   }
-  // },
-  beforeCreate () {
-    this.$parent.$emit('title', 'home')
+  methods: {
+    onMic () {
+      console.log(this.api)
+      if (this.api.getGraph().viz) {
+        this.api.getGraph().viz.onMic({})
+      }
+    },
+    onChoose () {
+      let fileInput = document.createElement('input')
+      fileInput.type = 'file'
+      fileInput.onchange = () => {
+        let ob = { url: URL.createObjectURL(fileInput.files[0]) }
+        if (this.api.getGraph().viz) {
+          this.api.getGraph().viz.onPlay(ob)
+        }
+      }
+      fileInput.click()
+    }
   }
 }
 </script>
 
-<style lang="css">
-.fade-enter-active, .fade-leave-active {
-  transition: opacity .5s;
-}
-.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
-  opacity: 0;
-}
-</style>
-
 <style scoped>
-.full{
-  width: 100%;
-  height: 100%;
+.pos-abs{
+  position: absolute;
+  top: 0px;
+  left: 0px;
 }
-.ka-main{
-  position: relative;
-  overflow: hidden;
-}
-
 </style>

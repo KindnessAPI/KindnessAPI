@@ -415,7 +415,7 @@ Audio GetAudio (GeoReader reader) {
   float totalSquares = idx.z;
 
   vec2 audioTextureDimension = vec2(
-    totalSquares,
+    totalSquares * 2.0,
     1.0
   );
   vec2 audioUV = vec2(mod(squareIDX, audioTextureDimension.x), 0.0) / audioTextureDimension;
@@ -436,7 +436,7 @@ void main ()	{
 
   //------ START READING ME --------
   vec2 planeSize = vec2(
-    0.03333333 + amount, // width
+    0.03333333 + 1.3 * amount, // width
     0.03333333 // height
   );
   vec2 gapSize = vec2(
@@ -463,14 +463,23 @@ void main ()	{
   // float sy = pattern(time + info.sphereIDX.yy);
   // float sz = pattern(time + info.sphereIDX.zz);
 
-  pos.xyz = rotateZ(pX * piz) * pos.xyz;
+  // default
+  // pos.xyz = rotateZ(pX * piz) * pos.xyz;
   // pos.xyz = rotateQ(normalize(vec3(1.0, 1.0, 1.0)) * rotateZ(time + pY * piz), time + pY * piz) * pos.xyz;
+
+  // infinity protection
   pos.xyz = rotateQ(normalize(vec3(1.0, 1.0, 1.0)), time + pX * piz) * rotateZ(time + pY * piz) * pos.xyz;
 
-  // pos += scale(amount, amount, amount) * pos;
+  // vortex
+  // pos.xyz = rotateQ(normalize(vec3(1.0, sin(time), 1.0)), time + pX * pY * piz * piz) * pos.xyz;
+
+  // pos.xyz = rotateQ(normalize(vec3(1.0, 1.0, 1.0)), time + pY * piz) * rotateZ(time + pY * piz) * pos.xyz;
+  // pos.z += sin(time  + pX * piz * 0.333) * 50.0;
+
+  // pos.xyz = rotateZ(time + pY * piz) * pos.xyz;
+  // pos.z += sin(time  + pX * piz * 0.333) * 50.0;
 
   // ------ STOP READING ME ------
-
   if (shouldSkipRender) {
     discard;
     return;
