@@ -434,14 +434,16 @@ void main ()	{
   float amount = audio.amount;
   float range = audio.range;
 
+  // -------
+
   //------ START READING ME --------
   vec2 planeSize = vec2(
-    0.03333333 + 1.3 * amount, // width
+    0.03333333 * 0.0 + (amount), // width
     0.03333333 // height
   );
   vec2 gapSize = vec2(
     0.0, // width
-    0.3 // height
+    0.05 + 0.2 * amount // height
   );
 
   Square info = GetPlane(reader, planeSize, gapSize);
@@ -468,12 +470,16 @@ void main ()	{
   // pos.xyz = rotateQ(normalize(vec3(1.0, 1.0, 1.0)) * rotateZ(time + pY * piz), time + pY * piz) * pos.xyz;
 
   // infinity protection
-  pos.xyz = rotateQ(normalize(vec3(1.0, 1.0, 1.0)), time + pX * piz) * rotateZ(time + pY * piz) * pos.xyz;
+  // pos.xyz = rotateZ(pX * piz + amount) * pos.xyz;
+  // pos.xyz = rotateQ(normalize(vec3(1.0, 1.0, 1.0)), time + pX * piz) * rotateZ(time + pY * piz) * pos.xyz;
+  // pos.xyz = rotateZ(pX * piz + amount) * pos.xyz;
 
   // vortex
-  // pos.xyz = rotateQ(normalize(vec3(1.0, sin(time), 1.0)), time + pX * pY * piz * piz) * pos.xyz;
+  // pos.xyz = rotateQ(normalize(vec3(1.0, 1.0, 1.0)), time + pX * pY * piz * piz) * pos.xyz;
 
-  // pos.xyz = rotateQ(normalize(vec3(1.0, 1.0, 1.0)), time + pY * piz) * rotateZ(time + pY * piz) * pos.xyz;
+  pos.xyz = rotateQ(normalize(vec3(1.0, 1.0, 0.0)), time + pX * piz) * rotateZ(time + pX * piz) * pos.xyz;
+
+
   // pos.z += sin(time  + pX * piz * 0.333) * 50.0;
 
   // pos.xyz = rotateZ(time + pY * piz) * pos.xyz;
