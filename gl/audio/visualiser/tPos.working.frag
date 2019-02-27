@@ -470,15 +470,16 @@ void main ()	{
   // pos.xyz = rotateQ(normalize(vec3(1.0, 1.0, 1.0)) * rotateZ(time + pY * piz), time + pY * piz) * pos.xyz;
 
   // infinity protection
-  // pos.xyz = rotateZ(pX * piz + amount) * pos.xyz;
-  // pos.xyz = rotateQ(normalize(vec3(1.0, 1.0, 1.0)), time + pX * piz) * rotateZ(time + pY * piz) * pos.xyz;
-  // pos.xyz = rotateZ(pX * piz + amount) * pos.xyz;
+  // pos.xyz = rotateY(pX * piz + amount) * pos.xyz;
+  // pos.xyz = rotateQ(normalize(vec3(1.0, 1.0, 1.0)), time + pX * piz) * rotateX(time + pY * piz) * pos.xyz;
+
+  // simple ribbon
+  pos.xyz = rotateZ(pZ * piz + amount) * pos.xyz;
+  pos.xyz = rotateX(pX * piz + amount) * pos.xyz;
 
   // vortex
   // pos.xyz = rotateQ(normalize(vec3(1.0, 1.0, 1.0)), time + pX * pY * piz * piz) * pos.xyz;
-
-  pos.xyz = rotateQ(normalize(vec3(1.0, 1.0, 0.0)), time + pX * piz) * rotateZ(time + pX * piz) * pos.xyz;
-
+  // pos.xyz = rotateQ(normalize(vec3(1.0, 1.0, 0.0)), time + pX * piz) * rotateZ(time + pX * piz) * pos.xyz;
 
   // pos.z += sin(time  + pX * piz * 0.333) * 50.0;
 
