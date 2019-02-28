@@ -31,6 +31,7 @@ window.SAVE_SETTINGS_AUDIO_VIZ = () => {
   return Settings
 };
 
+console.log(`copy(SAVE_SETTINGS_AUDIO_VIZ());`)
 
 var renderer, composer, size, scene, camera, rAFID, dpi, gui, graph, bloomPass, runners
 
@@ -68,7 +69,7 @@ var setupEditorGUI = ({ dom }) => {
   control.enableDamping = true
   control.enableKeys = false
   control.addEventListener('change', () => {
-    console.log(`${camera.position.x}, ${camera.position.y}, ${camera.position.z}`)
+    // console.log(`${camera.position.x}, ${camera.position.y}, ${camera.position.z}`)
   })
   setInterval(() => {
     control.update()
@@ -150,20 +151,6 @@ var run = () => {
   }
 }
 
-export const setupGraph = ({ dom }) => {
-  // objects
-  graph = graph || {}
-  graph.viz = viz.getAPI({ dom, renderer, scene, camera, gui, Settings })
-  return {
-    getGraph: () => {
-      return graph
-    },
-    runAll: () => {
-      graph.viz.render()
-    }
-  }
-}
-
 export const setup = ({ dom }) => {
   setupWindowResize({ dom })
   setupRenderer({ dom })
@@ -176,18 +163,18 @@ export const setup = ({ dom }) => {
 
   Settings.edit && setupEditorGUI({ dom })
 
-  runners = setupGraph({ dom })
+  let vizer = viz.getAPI({ dom, renderer, scene, camera, gui, Settings })
 
   function loop () {
     rAFID = window.requestAnimationFrame(loop)
-    runners.runAll()
+    vizer.render()
     run()
   }
   rAFID = window.requestAnimationFrame(loop)
-}
 
-export const getGraph = () => {
-  return runners.getGraph()
+  return {
+    vizer
+  }
 }
 
 export const clean = () => {

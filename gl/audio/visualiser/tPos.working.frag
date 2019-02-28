@@ -27,6 +27,7 @@ void toBall(vec3 pos, out float az, out float el) {
 // toBall(noiser, az, el);
 // lastVel.xyz = fromBall(1.0, az, el);
 
+//
 //	Classic Perlin 3D Noise
 //	by Stefan Gustavson
 //
@@ -474,14 +475,16 @@ void main ()	{
   // pos.xyz = rotateQ(normalize(vec3(1.0, 1.0, 1.0)), time + pX * piz) * rotateX(time + pY * piz) * pos.xyz;
 
   // simple ribbon
-  pos.xyz = rotateZ(pZ * piz + amount) * pos.xyz;
+
   pos.xyz = rotateX(pX * piz + amount) * pos.xyz;
+  pos.xyz = rotateY(pY * piz + amount) * pos.xyz;
+//   pos.xyz = rotateQ(normalize(vec3(1.0, 0.0, 1.0)), amount * 3.0 + pZ * pY * piz * piz) * pos.xyz;
 
   // vortex
   // pos.xyz = rotateQ(normalize(vec3(1.0, 1.0, 1.0)), time + pX * pY * piz * piz) * pos.xyz;
   // pos.xyz = rotateQ(normalize(vec3(1.0, 1.0, 0.0)), time + pX * piz) * rotateZ(time + pX * piz) * pos.xyz;
 
-  // pos.z += sin(time  + pX * piz * 0.333) * 50.0;
+  //pos.z += sin(time  + pX * piz * 0.333) * 50.0;
 
   // pos.xyz = rotateZ(time + pY * piz) * pos.xyz;
   // pos.z += sin(time  + pX * piz * 0.333) * 50.0;

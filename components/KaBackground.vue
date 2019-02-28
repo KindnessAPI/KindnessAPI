@@ -7,14 +7,14 @@
 export default {
   data () {
     return {
-      api: false,
+      mod: false,
       ready: false
     }
   },
   mounted () {
-    import('../gl/audio/index.js').then((api) => {
-      this.api = api
-      api.setup({ dom: this.$refs['insert'] })
+    import('../gl/audio/index.js').then((mod) => {
+      this.mod = mod
+      let api = mod.setup({ dom: this.$refs['insert'] })
       this.$nextTick(() => {
         this.ready = true
         this.$emit('ready', true)

@@ -36,6 +36,11 @@ export const makeAPI = ({ renderer, scene, camera, gui, CONFIG }) => {
   posVar.material.uniforms.time = { value: 0 };
   gpuCompute.setVariableDependencies( posVar, [ posVar ] );
 
+  api.onShaderEdit = ({ fs }) => {
+    posVar.material.fragmentShader = "\nuniform sampler2D " + `tPos` + ";\n" + fs;
+    posVar.material.needsUpdate = true
+  }
+
   var error = gpuCompute.init();
   if (error !== null) {
     console.error(error)
