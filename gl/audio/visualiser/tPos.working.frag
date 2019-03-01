@@ -427,6 +427,16 @@ Audio GetAudio (GeoReader reader) {
   return Audio(audioUV.x, amount);
 }
 
+vec3 ballify (vec3 pos, float r) {
+  float az = atan2(pos.y, pos.x);
+  float el = atan2(pos.z, sqrt(pos.x * pos.x + pos.y * pos.y));
+  return vec3(
+    r * cos(el) * cos(az),
+    r * cos(el) * sin(az),
+    r * sin(el)
+  );
+}
+
 void main ()	{
   GeoReader reader = GetGeoReader();
 
@@ -467,26 +477,64 @@ void main ()	{
   // float sz = pattern(time + info.sphereIDX.zz);
 
   // default
-  // pos.xyz = rotateZ(pX * piz) * pos.xyz;
-  // pos.xyz = rotateQ(normalize(vec3(1.0, 1.0, 1.0)) * rotateZ(time + pY * piz), time + pY * piz) * pos.xyz;
+//   pos.xyz = rotateZ(pX * piz) * pos.xyz;
+//   pos.xyz = rotateQ(normalize(vec3(1.0, 1.0, 1.0)) * rotateZ(time + pY * piz), time + pY * piz) * pos.xyz;
 
   // infinity protection
-  // pos.xyz = rotateY(pX * piz + amount) * pos.xyz;
-  // pos.xyz = rotateQ(normalize(vec3(1.0, 1.0, 1.0)), time + pX * piz) * rotateX(time + pY * piz) * pos.xyz;
+  float myMode = 10.0;
+  if (myMode == 1.0) {
+    // infinity black hole
+    pos.xyz = rotateY(pX * piz + amount) * pos.xyz;
+    pos.xyz = rotateQ(normalize(vec3(1.0, 1.0, 1.0)), pX * piz + amount) * rotateX(pX * piz) * pos.xyz;
+  } else if (myMode == 2.0) {
+    // flat flower
+    pos.xyz = rotateX(pX * piz + amount) * pos.xyz;
+    pos.xyz = rotateY(pY * piz + amount) * pos.xyz;
+  } else if (myMode == 3.0) {
+    // rose voice tube
+    pos.xyz = rotateX(pX * piz * sin(amount * 3.14159262)) * pos.xyz;
+  } else if (myMode == 4.0) {
+    // rose clean tube
+    pos.xyz = rotateX(pX * piz + amount) * pos.xyz;
+  } else if (myMode == 5.0) {
+    // twister
+    pos.xyz = rotateQ(normalize(vec3(1.0, 0.5, 0.2)), pX * piz + amount) * sin(amount * 3.14159265 * 1.0) * pos.xyz;
+  } else if (myMode == 6.0) {
+    // flower tube
+    pos.xyz = rotateQ(normalize(vec3(1.0, 0.5, 0.2)), pX * piz * sin(amount * 3.14159265)) * pos.xyz;
+  } else if (myMode == 7.0) {
+    // flipper
+    pos.xyz = rotateQ(normalize(vec3(1.0, 0.5, 0.2)), pX * piz * sin(amount * 3.14159265)) * pos.xyz;
+    pos.xyz = rotateX(3.14159265 * 0.35) * pos.xyz;
+    pos.xyz = rotateY(3.14159265 * 1.75) * pos.xyz;
+  } else if (myMode == 8.0) {
+    // ball ball sphere
+    pos.x *= 0.6;
+    pos.xyz = rotateQ(normalize(vec3(1.0, 1.0, 1.0)), time + pX * piz) * rotateZ(time + pY * piz) * pos.xyz;
+  } else if (myMode == 9.0) {
+    // dual spiral
+    pos.x *= 0.6;
+    pos.y *= 0.6;
+    pos.xyz *= rotateQ(normalize(vec3(1.0, sin(time), 1.0)), time + pX * piz);
+  } else if (myMode == 10.0) {
+    pos.xyz *= rotateQ(normalize(vec3(1.0, sin(time), 1.0)), time + pX * piz) + pow(cos(amount * 0.5 * 3.14159265), 1.5);
+  } else if (myMode == 11.0) {
+  } else if (myMode == 12.0) {
+  }
 
   // simple ribbon
 
-  pos.xyz = rotateX(pX * piz + amount) * pos.xyz;
-  pos.xyz = rotateY(pY * piz + amount) * pos.xyz;
+
+  /*
+
+  */
+
 //   pos.xyz = rotateQ(normalize(vec3(1.0, 0.0, 1.0)), amount * 3.0 + pZ * pY * piz * piz) * pos.xyz;
 
   // vortex
-  // pos.xyz = rotateQ(normalize(vec3(1.0, 1.0, 1.0)), time + pX * pY * piz * piz) * pos.xyz;
-  // pos.xyz = rotateQ(normalize(vec3(1.0, 1.0, 0.0)), time + pX * piz) * rotateZ(time + pX * piz) * pos.xyz;
 
   //pos.z += sin(time  + pX * piz * 0.333) * 50.0;
 
-  // pos.xyz = rotateZ(time + pY * piz) * pos.xyz;
   // pos.z += sin(time  + pX * piz * 0.333) * 50.0;
 
   // ------ STOP READING ME ------

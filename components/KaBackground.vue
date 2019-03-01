@@ -23,7 +23,9 @@ export default {
     })
   },
   beforeDestroy () {
-    this.api.clean()
+    if (this.mod) {
+      this.mod.clean()
+    }
   }
 }
 </script>

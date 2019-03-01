@@ -44,6 +44,11 @@ export default {
       require('brace/mode/glsl')
       require('brace/theme/monokai')
 
+      editor.session.setOptions({
+        tabSize: 2,
+        useSoftTabs: true
+      })
+
       var commands = [
         {
           name: 'save',
