@@ -481,7 +481,7 @@ void main ()	{
 //   pos.xyz = rotateQ(normalize(vec3(1.0, 1.0, 1.0)) * rotateZ(time + pY * piz), time + pY * piz) * pos.xyz;
 
   // infinity protection
-  float myMode = 10.0;
+  float myMode = 4.0;
   if (myMode == 1.0) {
     // infinity black hole
     pos.xyz = rotateY(pX * piz + amount) * pos.xyz;
@@ -519,6 +519,9 @@ void main ()	{
   } else if (myMode == 10.0) {
     pos.xyz *= rotateQ(normalize(vec3(1.0, sin(time), 1.0)), time + pX * piz) + pow(cos(amount * 0.5 * 3.14159265), 1.5);
   } else if (myMode == 11.0) {
+    // simple ribbon
+    pos.xyz = rotateX(pX * piz + amount) * pos.xyz;
+    pos.xyz = rotateY(pX * piz + amount) * pos.xyz;
   } else if (myMode == 12.0) {
   }
 
