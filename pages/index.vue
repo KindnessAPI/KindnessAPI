@@ -5,10 +5,11 @@
         KindnessAPI
       </h1>
       <h2>
-        How did I become happy again.
+        Jots, Writings, Quotes and Aphorisms by <a target="_blank" href="https://www.wonglok.com">Wong Lok</a>
       </h2>
+
       <h3>
-        Jots, Writings, Quotes and Aphorisms by <a href="https://twitter.com/wonglok831">@wonglok831</a>
+        Thoguht Process and Mindset of How did I become happy again.
       </h3>
 
       <ol>
