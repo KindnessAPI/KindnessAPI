@@ -59,7 +59,7 @@ export default {
 </script>
 
 
-<style lang="less">
+<style lang="less" scoped>
 @import url('../assets/Geomanist-Regular-Webfont/stylesheet.css');
 @panelw: 256px;
 @collapsew: 0px;
@@ -112,16 +112,6 @@ export default {
   .page.is-collapse & {
     width: @collapsew;
   }
-}
-body {
-  font-family: geomanistregular, Roboto, Lato, sans-serif;
-  line-height: 1.5;
-  font-size: 14px;
-  font-weight: 400;
-  width: 100%;
-  -webkit-tap-highlight-color: rgba(0, 0, 0, 0.144);
-  background-color: #fafafa;
-  color: rgba(0,0,0,.87);
 }
 </style>
 

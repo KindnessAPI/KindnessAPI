@@ -12,7 +12,7 @@ let iaxios = axios.create({
 })
 
 export const getDataWithProxy = ({ url }) => {
-  return iaxios.post(`/api/v1/proxy-url`, {
+  return iaxios.post(`/api/v1/proxy-url-get-method`, {
     url
   })
 }

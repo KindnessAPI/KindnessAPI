@@ -16,6 +16,9 @@
       </div>
     </div>
     <div>
+      <pre>{{ onData }}</pre>
+    </div>
+    <div>
       <h2>
         Read from Firestore.
       </h2>
@@ -41,8 +44,12 @@ export default {
     return {
       writeSuccessful: false,
       readSuccessful: false,
-      text: ""
+      text: "",
+      onData: false
     }
+  },
+  mounted () {
+    this.listenForChange()
   },
   async asyncData({app, params, error}) {
     const ref = fireDb.collection("test").doc("test")
@@ -58,6 +65,18 @@ export default {
     }
   },
   methods: {
+    listenForChange () {
+      fireDb.collection("test").doc("test")
+        .onSnapshot((doc) => {
+            var source = doc.metadata.hasPendingWrites ? "Local" : "Server";
+            var data = doc.data();
+            console.log(source, data);
+            this.onData = {
+              source,
+              data
+            }
+        });
+    },
     async writeToFirestore() {
       const ref = fireDb.collection("test").doc("test")
       const document = {
@@ -65,23 +84,26 @@ export default {
       }
       try {
         await ref.set(document)
+        this.writeSuccessful = true
       } catch (e) {
         // TODO: error handling
         console.error(e)
+        this.writeSuccessful = false
       }
-      this.writeSuccessful = true
+
     },
     async readFromFirestore() {
       const ref = fireDb.collection("test").doc("test")
       let snap
       try {
         snap = await ref.get()
+        this.text = snap.data().text
+        this.readSuccessful = true
       } catch (e) {
         // TODO: error handling
         console.error(e)
+        this.readSuccessful = false
       }
-      this.text = snap.data().text
-      this.readSuccessful = true
     }
   }
 }
