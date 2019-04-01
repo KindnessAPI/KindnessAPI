@@ -10,9 +10,9 @@
         </PhysicsPass>
       </Object3D>
 
-      <PhysicsPass v-if="worker" :size="{ x: 9000, y: 5, z: 9000 }" :move="false" :id="'_floor'" :geo="'box'" :physics="worker">
-        <Object3D :position="{ x: 0, y: -60, z: 5 }">
-          <Box :size="{ x: 9000, y: -4.5, z: 9000 }" :color="{ x: 0.12, y: 0.12, z: 0.12 }"></Box>
+      <PhysicsPass v-if="worker" :size="{ x: 250, y: 5, z: 250 }" :move="false" :id="'_floor'" :geo="'box'" :physics="worker">
+        <Object3D :position="{ x: 0, y: 0, z: 5 }" :quaternion="{ x: 0.0, y: 0.0, z: 0.2, w: 0.8 }">
+          <Box :size="{ x: 250, y: -4.5, z: 250 }" :color="{ x: 0.12, y: 0.12, z: 0.12 }"></Box>
         </Object3D>
       </PhysicsPass>
 
@@ -50,46 +50,46 @@ export default {
   data () {
     return {
       boxes: [
-        {
-          _id: getRD(),
-          geo: 'box',
-          move: true,
-          size: { x: 20, y: 20, z: 20 },
-          quaternion: { x: 0, y: 0, z: 0, w: 0 },
-          position: { x: 0, y: 40, z: 0 },
-        },
-        {
-          _id: getRD(),
-          geo: 'box',
-          move: true,
-          size: { x: 20, y: 20, z: 20 },
-          quaternion: { x: 0, y: 0, z: 0, w: 0 },
-          position: { x: 0, y: 20, z: 0 },
-        },
-        {
-          _id: getRD(),
-          geo: 'box',
-          move: true,
-          size: { x: 20, y: 20, z: 20 },
-          quaternion: { x: 0, y: 0, z: 0, w: 0 },
-          position: { x: 0, y: 0, z: 0 },
-        },
-        {
-          _id: getRD(),
-          geo: 'box',
-          move: true,
-          size: { x: 20, y: 20, z: 20 },
-          quaternion: { x: 0, y: 0, z: 0, w: 0 },
-          position: { x: 0, y: -20, z: 0 },
-        },
-        {
-          _id: getRD(),
-          geo: 'box',
-          move: true,
-          size: { x: 20, y: 20, z: 20 },
-          quaternion: { x: 0, y: 0, z: 0, w: 0 },
-          position: { x: 0, y: -40, z: 0 },
-        }
+        // {
+        //   _id: getRD(),
+        //   geo: 'box',
+        //   move: true,
+        //   size: { x: 20, y: 20, z: 20 },
+        //   quaternion: { x: 0, y: 0, z: 0, w: 0 },
+        //   position: { x: 0, y: 40, z: 0 },
+        // },
+        // {
+        //   _id: getRD(),
+        //   geo: 'box',
+        //   move: true,
+        //   size: { x: 20, y: 20, z: 20 },
+        //   quaternion: { x: 0, y: 0, z: 0, w: 0 },
+        //   position: { x: 0, y: 20, z: 0 },
+        // },
+        // {
+        //   _id: getRD(),
+        //   geo: 'box',
+        //   move: true,
+        //   size: { x: 20, y: 20, z: 20 },
+        //   quaternion: { x: 0, y: 0, z: 0, w: 0 },
+        //   position: { x: 0, y: 0, z: 0 },
+        // },
+        // {
+        //   _id: getRD(),
+        //   geo: 'box',
+        //   move: true,
+        //   size: { x: 20, y: 20, z: 20 },
+        //   quaternion: { x: 0, y: 0, z: 0, w: 0 },
+        //   position: { x: 0, y: -20, z: 0 },
+        // },
+        // {
+        //   _id: getRD(),
+        //   geo: 'box',
+        //   move: true,
+        //   size: { x: 20, y: 20, z: 20 },
+        //   quaternion: { x: 0, y: 0, z: 0, w: 0 },
+        //   position: { x: 0, y: -40, z: 0 },
+        // }
       ],
       size: false,
       dpi: 2,
@@ -120,12 +120,12 @@ export default {
     for (var i = 0; i < 35; i++) {
       this.boxes.push({
         _id: getRD(),
-        geo: 'sphere',
+        geo: 'box',
         move: true,
         size: { x: 10, y: 10, z: 10 },
         quaternion: { x: Math.random(), y: 0, z: 0, w: 0.9 },
 
-        position: { x: 0, y: 200 - 0 + i * 20.0, z: 0 },
+        position: { x: -50 + 100 * Math.random(), y: -50 + 100 * Math.random() + 200 + 500 * Math.random(), z: -50 + 100 * Math.random() },
       })
     }
   },

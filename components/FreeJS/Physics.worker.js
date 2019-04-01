@@ -12,7 +12,7 @@ const setup = (data) => {
     timestep: 1 / 60,
     iterations: 8,
     broadphase: 2, // 1 brute force, 2 sweep and prune, 3 volume tree
-    worldscale: 1, // scale full world
+    worldscale: 5, // scale full world
     random: true,  // randomize sample
     info: false,   // calculate statistic or not
     gravity: [0,-9.8,0]
@@ -27,10 +27,18 @@ const update = () => {
   world.step()
 
   let db = bodies.map((b) => {
+    let position = b.body.getPosition()
+    if (position.y < -100) {
+      let x = b.data.position[0]
+      let y = b.data.position[1]
+      let z = b.data.position[2]
+      b.body.resetPosition(x, y, z)
+      position = b.body.getPosition()
+    }
     return {
       ...b.data,
 
-      position: b.body.getPosition(),
+      position,
       quaternion: b.body.getQuaternion()
     }
   })
