@@ -54,7 +54,7 @@ export default {
         _id: this.id,
         type: 'addItem',
         position: object.position.toArray(),
-        rotation: object.rotation.toArray().map(v => v / Math.PI / 2 * 360),
+        rotation: object.rotation.toArray().map(v => v / (Math.PI * 2) * 360),
         geo: this.geo,
         move: this.move,
         size: this.size,

@@ -5,14 +5,13 @@
       <Object3D v-if="worker">
         <PhysicsPass :size="oo.size" :move="oo.move" :id="oo._id" :geo="oo.geo" :physics="worker"  :key="oo._id" v-for="oo in boxes">
           <Object3D :position="oo.position">
-            <Box></Box>
+            <Box :size="oo.size"></Box>
           </Object3D>
         </PhysicsPass>
       </Object3D>
 
-
-      <PhysicsPass v-if="worker" :size="{ x: 9000, y: 5, z: 9000 }" :move="false" :id="'_asd8s90ad809sad'" :geo="'box'" :physics="worker">
-        <Object3D :position="{ x: 0, y: -60, z: 0 }">
+      <PhysicsPass v-if="worker" :size="{ x: 9000, y: 1, z: 9000 }" :move="false" :id="'_floor'" :geo="'box'" :physics="worker">
+        <Object3D :position="{ x: 0, y: -60, z: 5 }">
           <Box :size="{ x: 9000, y: 5, z: 9000 }" :color="{ x: 0.12, y: 0.12, z: 0.12 }"></Box>
         </Object3D>
       </PhysicsPass>
@@ -34,7 +33,6 @@ import 'imports-loader?THREE=three!three/examples/js/shaders/LuminosityHighPassS
 import 'imports-loader?THREE=three!three/examples/js/postprocessing/UnrealBloomPass.js'
 
 import 'imports-loader?THREE=three!three/examples/js/controls/OrbitControls.js'
-
 
 import FreeJS from '../FreeJS'
 import * as THREE from 'three'
@@ -73,28 +71,6 @@ export default {
           size: { x: 20, y: 22, z: 20 },
           position: { x: 0, y: 0, z: 0 },
         },
-        {
-          _id: getRD(),
-          geo: 'box',
-          move: true,
-          size: { x: 20, y: 22, z: 20 },
-          position: { x: 0, y: 0, z: 0 },
-        },
-        {
-          _id: getRD(),
-          geo: 'box',
-          move: true,
-          size: { x: 20, y: 22, z: 20 },
-          position: { x: 0, y: 0, z: 0 },
-        },
-        {
-          _id: getRD(),
-          geo: 'box',
-          move: true,
-          size: { x: 20, y: 22, z: 20 },
-          position: { x: 0, y: 0, z: 0 },
-        },
-
         {
           _id: getRD(),
           geo: 'box',
@@ -141,7 +117,7 @@ export default {
         _id: getRD(),
         geo: 'box',
         move: true,
-        size: { x: 20, y: 22, z: 20 },
+        size: { x: 10, y: 10, z: 10 },
         position: { x: i * 10.0, y: 0 + i * 15.0, z: 0 },
       })
     }
@@ -179,14 +155,10 @@ export default {
         import('worker-loader?inline=true!../FreeJS/Physics.worker.js').then(mod => {
           let PhysicsWorkerScript = mod.default
           this.worker = new PhysicsWorkerScript()
-          this.worker.addEventListener('message', (evt) => {
-            let data = evt.data
-            let type = data.type
-
-            if (type === 'update') {
-              // console.log('main', evt.data)
-            }
-          })
+          // this.worker.addEventListener('message', (evt) => {
+          //   let data = evt.data
+          //   let type = data.type
+          // })
           this.worker.postMessage({ type: 'setup' })
         })
       }

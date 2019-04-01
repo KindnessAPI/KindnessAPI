@@ -41,8 +41,8 @@ const addItem = (data) => {
   var body = world.add({
       type: data.geo || 'sphere', // type of shape : sphere, box, cylinder
       size: [data.size.x,data.size.y,data.size.z], // size of shape
-      pos:data.position, // start position in degree
-      rot:data.rotation, // start rotation in degree
+      pos:data.position, // start position in degree [0,0,0]
+      rot:data.rotation, // start rotation in degree [0,0,0]
       move: data.move === true ? true : false, // dynamic or statique
       density: data.density || 1,
       friction: data.friction || 0.2,
@@ -55,6 +55,15 @@ const addItem = (data) => {
     data,
     body
   })
+}
+
+const resetItem = (data) => {
+  let idx = bodies.findIndex(b => b.data._id === data._id)
+  if (idx !== -1) {
+    let entry = bodies[idx]
+    let body = entry.body
+    body.resetPosition(data.position.x, data.position.y, data.position.z);
+  }
 }
 
 const removeItem = (data) => {
@@ -79,5 +88,9 @@ self.addEventListener('message', (evt) => {
     addItem(data)
   } else if (type === 'removeItem') {
     removeItem(data)
+  } else if (type === 'resetItem') {
+    resetItem(data)
   }
+
+
 })
