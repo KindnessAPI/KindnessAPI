@@ -1,18 +1,20 @@
 <template>
   <div class="full" ref="mounter">
-    <Scene @ready="(v) => { scene = v }">
+    <Scene @ready="(v) => { scene = v; init() }" >
 
-      <Object3D :position="{ x: 0, y: 40, z: 0 }">
-        <Box></Box>
+      <Object3D v-if="world">
+        <PhysicsItem :size="oo.size" :move="oo.move" :id="oo._id" :geo="oo.geo" :bodies="bodies" :world="world"  :key="oo._id" v-for="oo in boxes">
+          <Object3D :quaternion="oo.quaternion" :position="oo.position">
+            <Box :size="oo.size" :color="oo.color"></Box>
+          </Object3D>
+        </PhysicsItem>
       </Object3D>
 
-      <Object3D :position="{ x: 0, y: 20, z: 0 }">
-        <Box></Box>
-      </Object3D>
-
-      <Object3D :position="{ x: 0, y: 0, z: 0 }">
-        <Box></Box>
-      </Object3D>
+      <PhysicsItem v-if="world" :size="{ x: 300, y: 5, z: 300 }" :move="false" :id="'_floor'" :geo="'box'" :bodies="bodies" :world="world">
+        <Object3D :position="{ x: 0, y: 0, z: 5 }" :quaternion="{ x: 0.0, y: 0.0, z: 0.2, w: 0.8 }">
+          <Box :size="{ x: 300, y: -4.5, z: 300 }" :color="`rgb(20,20,20)`"></Box>
+        </Object3D>
+      </PhysicsItem>
 
     </Scene>
   </div>
@@ -35,6 +37,12 @@ import 'imports-loader?THREE=three!three/examples/js/controls/OrbitControls.js'
 import FreeJS from '../FreeJS'
 import * as THREE from 'three'
 import Box from '../Items/Box.vue'
+import * as OIMO from 'oimo'
+
+let getRD = () => {
+  return `_${(Math.random() * 1000000).toFixed(0)}`
+}
+
 export default {
   components: {
     ...FreeJS,
@@ -42,17 +50,22 @@ export default {
   },
   data () {
     return {
+      bodies: [],
+      boxes: [
+      ],
       size: false,
       dpi: 2,
       rAFID: 0,
       scene: false,
       renderer: false,
       camera: false,
+      readyInit: false,
+      world: false,
       Settings: {
         camPos: [
-          4.428399491709158,
-          -24.619363082149615,
-          -137.212497523395
+          0,
+          140.619363082149615,
+          -300.212497523395
         ],
         bloomPass: {
           threshold: 0.0846740050804403,
@@ -65,16 +78,66 @@ export default {
   beforeDestroy () {
     this.stop()
   },
+  created () {
+    let buck = []
+    for (var i = 0; i < 50; i++) {
+      buck.push({
+        _id: getRD(),
+        geo: 'box',
+        move: true,
+        size: { x: 40, y: 4, z: 4 },
+        color: `hsl(${(360 * Math.random()).toFixed(0)}, 100%, 64%)`,
+        quaternion: { x: Math.random(), y: Math.random(), z: Math.random(), w: 0.0 },
+        position: { x: -50 + 100 * Math.random(), y: -50 + 100 * Math.random() + 200 + 1000 * Math.random(), z: -50 + 100 * Math.random() },
+      })
+    }
+    this.boxes = [...this.boxes, ...buck]
+  },
   mounted () {
-    this.setupRenderer()
-    this.setupSizer()
-    this.setupCamera()
-    this.setupComposer()
-    this.setupControl()
-    this.syncSize()
-    this.start()
+    this.setupPhysics()
+  },
+  watch: {
   },
   methods: {
+    init () {
+      this.setupRenderer()
+      this.setupSizer()
+      this.setupCamera()
+      this.setupComposer()
+      this.setupControl()
+      this.syncSize()
+      this.start()
+    },
+    setupPhysics () {
+      this.world = new OIMO.World({
+        timestep: 1 / 60,
+        iterations: 8,
+        broadphase: 2, // 1 brute force, 2 sweep and prune, 3 volume tree
+        worldscale: 5, // scale full world
+        random: true,  // randomize sample
+        info: false,   // calculate statistic or not
+        gravity: [0,-9.8,0]
+      })
+      this.world.postLoop = () => {
+        this.postLoop()
+      }
+    },
+    postLoop () {
+      this.bodies.forEach((entry) => {
+        let body = entry.body
+        let object = entry.object
+        let defaultPos = entry.defaultPos
+
+        if (!body.sleeping) {
+          object.position.copy(body.getPosition())
+          object.quaternion.copy(body.getQuaternion())
+
+          if (object.position.y < -130) {
+            body.resetPosition(defaultPos.x, defaultPos.y, defaultPos.z)
+          }
+        }
+      })
+    },
     setupControl () {
       var control = new THREE.OrbitControls(this.camera, this.renderer.domElement)
       this.control = control
@@ -152,7 +215,10 @@ export default {
       this.rAFID = window.requestAnimationFrame(rAF)
     },
     render () {
-      let { scene, camera, renderer, composer } = this
+      let { scene, camera, renderer, composer, world } = this
+      if (world) {
+        world.step()
+      }
       if (scene && camera && renderer && composer) {
         composer.render()
       } else if (scene && camera && renderer) {

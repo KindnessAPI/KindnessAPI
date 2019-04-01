@@ -5,14 +5,14 @@
       <Object3D v-if="world">
         <PhysicsItem :size="oo.size" :move="oo.move" :id="oo._id" :geo="oo.geo" :bodies="bodies" :world="world"  :key="oo._id" v-for="oo in boxes">
           <Object3D :quaternion="oo.quaternion" :position="oo.position">
-            <Box :size="oo.size"></Box>
+            <Box :size="oo.size" :color="oo.color"></Box>
           </Object3D>
         </PhysicsItem>
       </Object3D>
 
       <PhysicsItem v-if="world" :size="{ x: 300, y: 5, z: 300 }" :move="false" :id="'_floor'" :geo="'box'" :bodies="bodies" :world="world">
         <Object3D :position="{ x: 0, y: 0, z: 5 }" :quaternion="{ x: 0.0, y: 0.0, z: 0.2, w: 0.8 }">
-          <Box :size="{ x: 300, y: -4.5, z: 300 }" :color="{ x: 0.12, y: 0.12, z: 0.12 }"></Box>
+          <Box :size="{ x: 300, y: -4.5, z: 300 }" :color="`rgb(20,20,20)`"></Box>
         </Object3D>
       </PhysicsItem>
 
@@ -86,6 +86,7 @@ export default {
         geo: 'box',
         move: true,
         size: { x: 40, y: 4, z: 4 },
+        color: `hsl(${(360 * Math.random()).toFixed(0)}, 100%, 64%)`,
         quaternion: { x: Math.random(), y: Math.random(), z: Math.random(), w: 0.0 },
         position: { x: -50 + 100 * Math.random(), y: -50 + 100 * Math.random() + 200 + 1000 * Math.random(), z: -50 + 100 * Math.random() },
       })
@@ -116,6 +117,25 @@ export default {
         random: true,  // randomize sample
         info: false,   // calculate statistic or not
         gravity: [0,-9.8,0]
+      })
+      this.world.postLoop = () => {
+        this.postLoop()
+      }
+    },
+    postLoop () {
+      this.bodies.forEach((entry) => {
+        let body = entry.body
+        let object = entry.object
+        let defaultPos = entry.defaultPos
+
+        if (!body.sleeping) {
+          object.position.copy(body.getPosition())
+          object.quaternion.copy(body.getQuaternion())
+
+          if (object.position.y < -130) {
+            body.resetPosition(defaultPos.x, defaultPos.y, defaultPos.z)
+          }
+        }
       })
     },
     setupControl () {
@@ -195,24 +215,9 @@ export default {
       this.rAFID = window.requestAnimationFrame(rAF)
     },
     render () {
-      let { scene, camera, renderer, composer, world, bodies } = this
-      if (world && bodies) {
+      let { scene, camera, renderer, composer, world } = this
+      if (world) {
         world.step()
-
-        bodies.forEach((entry) => {
-          let body = entry.body
-          let object = entry.object
-          let defaultPos = entry.defaultPos
-
-          if (!body.sleeping) {
-            object.position.copy(body.getPosition())
-            object.quaternion.copy(body.getQuaternion())
-
-            if (object.position.y < -100) {
-              body.resetPosition(defaultPos.x, defaultPos.y, defaultPos.z)
-            }
-          }
-        })
       }
       if (scene && camera && renderer && composer) {
         composer.render()

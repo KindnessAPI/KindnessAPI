@@ -1,26 +1,62 @@
 <template>
-  <div class="full" ref="entryDOM">
+  <div class="full posrel" ref="entryDOM">
     <no-ssr placeholder="Loading...">
       <div class="mic" v-if="!ready">
         <button @click="onStart">
           Start
         </button>
       </div>
-      <StaticUniverse v-if="ready" />
+      <PhysicsLocally v-if="ready" :toucher="$refs['toucher']" />
     </no-ssr>
+    <div class="full posabs" :ref="'toucher'">
+      <div class="my-wrapper">
+        <div class="my-content">
+          <h1>
+            KindnessAPI
+          </h1>
+          <h2>
+            Jots, Writings, Quotes and Aphorisms by <a target="_blank" href="https://www.wonglok.com">Wong Lok</a>
+          </h2>
+
+          <h3>
+            Thoguht Process and Mindset of How did I become happy again.
+          </h3>
+
+          <ol>
+            <li :key="qq.uri" v-for="qq in quotes">
+              <span>
+                {{ qq.text }}
+              </span>
+            </li>
+          </ol>
+        </div>
+
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import screenfull from 'screenfull'
-import StaticUniverse from '@/components/Pipeline/StaticUniverse.vue'
+import PhysicsLocally from '@/components/Pipeline/PhysicsLocally.vue'
+import * as iNet from '../plugins/inet.js'
+
 export default {
   components: {
-    StaticUniverse
+    PhysicsLocally
   },
   data () {
     return {
-      ready: true
+      ready: true,
+      meta: false,
+      quotes: false
+    }
+  },
+  async asyncData ({ isDev, route, store, env, params, query, req, res, redirect, error }) {
+    let resp = await iNet.getDataWithProxy({ url: `https://www.wonglok.com/quotes/?as=json&limit=100` })
+    return {
+      meta: resp.data.meta,
+      quotes: resp.data.data
     }
   },
   methods: {
@@ -38,5 +74,39 @@ export default {
 .full{
   width: 100%;
   height: 100%;
+}
+.posrel{
+  position: relative;
+}
+.posabs{
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  transform: translateZ(10px);
+}
+.my-wrapper{
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  color: white;
+  text-shadow: 0px 0px 10px black;
+}
+.my-content{
+  margin: 29px;
+  padding: 1px;
+}
+
+.my-wrapper a,
+.my-wrapper a:hover,
+.my-wrapper a:active,
+.my-wrapper a:visited,
+.my-wrapper a:focus{
+  color: white;
+  text-shadow: 0px 0px 5px blue;
+}
+
+.my-wrapper a:hover{
+  color: rgb(72, 22, 255);
 }
 </style>

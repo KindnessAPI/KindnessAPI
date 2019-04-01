@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { Mesh, BoxBufferGeometry, ShaderMaterial } from 'three'
+import { Mesh, BoxBufferGeometry, ShaderMaterial, Color } from 'three'
 export default {
   props: {
     size: {
@@ -27,6 +27,11 @@ export default {
   mounted () {
     let geo = new BoxBufferGeometry(this.size.x, this.size.y, this.size.z, 4, 4, 4)
     let mat = new ShaderMaterial({
+      uniforms: {
+        neoColor: {
+          value: new Color(`${this.color}`)
+        }
+      },
       transparent: true,
       vertexShader: `
         void main()	{
@@ -34,8 +39,9 @@ export default {
         }
       `,
       fragmentShader: `
+        uniform vec3 neoColor;
         void main (void) {
-          gl_FragColor = vec4(${this.color.x}, ${this.color.y}, ${this.color.z}, 0.7);
+          gl_FragColor = vec4(neoColor, 0.7);
         }
       `
     })
