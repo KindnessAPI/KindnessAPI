@@ -1,6 +1,6 @@
 <template>
   <div class="full" ref="mounter">
-    <Scene @ready="(v) => { scene = v }" >
+    <Scene @ready="(v) => { scene = v; init() }" >
 
       <Object3D v-if="worker">
         <PhysicsPass :size="oo.size" :move="oo.move" :id="oo._id" :geo="oo.geo" :physics="worker"  :key="oo._id" v-for="oo in boxes">
@@ -10,9 +10,9 @@
         </PhysicsPass>
       </Object3D>
 
-      <PhysicsPass v-if="worker" :size="{ x: 9000, y: 1, z: 9000 }" :move="false" :id="'_floor'" :geo="'box'" :physics="worker">
+      <PhysicsPass v-if="worker" :size="{ x: 9000, y: 5, z: 9000 }" :move="false" :id="'_floor'" :geo="'box'" :physics="worker">
         <Object3D :position="{ x: 0, y: -60, z: 5 }">
-          <Box :size="{ x: 9000, y: 5, z: 9000 }" :color="{ x: 0.12, y: 0.12, z: 0.12 }"></Box>
+          <Box :size="{ x: 9000, y: -4.5, z: 9000 }" :color="{ x: 0.12, y: 0.12, z: 0.12 }"></Box>
         </Object3D>
       </PhysicsPass>
 
@@ -54,7 +54,7 @@ export default {
           _id: getRD(),
           geo: 'box',
           move: true,
-          size: { x: 20, y: 22, z: 20 },
+          size: { x: 20, y: 20, z: 20 },
           quaternion: { x: 0, y: 0, z: 0, w: 0 },
           position: { x: 0, y: 40, z: 0 },
         },
@@ -62,7 +62,7 @@ export default {
           _id: getRD(),
           geo: 'box',
           move: true,
-          size: { x: 20, y: 22, z: 20 },
+          size: { x: 20, y: 20, z: 20 },
           quaternion: { x: 0, y: 0, z: 0, w: 0 },
           position: { x: 0, y: 20, z: 0 },
         },
@@ -70,7 +70,7 @@ export default {
           _id: getRD(),
           geo: 'box',
           move: true,
-          size: { x: 20, y: 22, z: 20 },
+          size: { x: 20, y: 20, z: 20 },
           quaternion: { x: 0, y: 0, z: 0, w: 0 },
           position: { x: 0, y: 0, z: 0 },
         },
@@ -78,7 +78,7 @@ export default {
           _id: getRD(),
           geo: 'box',
           move: true,
-          size: { x: 20, y: 22, z: 20 },
+          size: { x: 20, y: 20, z: 20 },
           quaternion: { x: 0, y: 0, z: 0, w: 0 },
           position: { x: 0, y: -20, z: 0 },
         },
@@ -86,7 +86,7 @@ export default {
           _id: getRD(),
           geo: 'box',
           move: true,
-          size: { x: 20, y: 22, z: 20 },
+          size: { x: 20, y: 20, z: 20 },
           quaternion: { x: 0, y: 0, z: 0, w: 0 },
           position: { x: 0, y: -40, z: 0 },
         }
@@ -101,9 +101,9 @@ export default {
       readyInit: false,
       Settings: {
         camPos: [
-          4.428399491709158,
-          -24.619363082149615,
-          -137.212497523395
+          0,
+          140.619363082149615,
+          -300.212497523395
         ],
         bloomPass: {
           threshold: 0.0846740050804403,
@@ -117,13 +117,15 @@ export default {
     this.stop()
   },
   created () {
-    for (var i = 0; i < 15; i++) {
+    for (var i = 0; i < 35; i++) {
       this.boxes.push({
         _id: getRD(),
-        geo: 'box',
+        geo: 'sphere',
         move: true,
         size: { x: 10, y: 10, z: 10 },
-        position: { x: i * 10.0, y: 0 + i * 15.0, z: 0 },
+        quaternion: { x: Math.random(), y: 0, z: 0, w: 0.9 },
+
+        position: { x: 0, y: 200 - 0 + i * 20.0, z: 0 },
       })
     }
   },
@@ -131,16 +133,6 @@ export default {
     this.setupPhysics()
   },
   watch: {
-    scene () {
-      if (this.worker && this.scene) {
-        this.init()
-      }
-    },
-    worker () {
-      if (this.worker && this.scene) {
-        this.init()
-      }
-    }
   },
   methods: {
     init () {
@@ -153,32 +145,31 @@ export default {
       this.start()
     },
     setupPhysics () {
-      if (process.client) {
-        if (this.worker) {
-          this.worker.terminate()
-        }
-        import('worker-loader?inline=true!../FreeJS/Physics.worker.js').then(mod => {
-          let PhysicsWorkerScript = mod.default
-          this.worker = new PhysicsWorkerScript()
-          this.worker.addEventListener('message', (evt) => {
-            let data = evt.data
-
-            let type = data.type
-            let db = data.db
-
-            if (type === 'update' && db) {
-              db.forEach((entry) => {
-                let box = this.boxes.find(b => b._id === entry._id)
-                if (box) {
-                  box.position = entry.position
-                  box.quaternion = entry.quaternion
-                }
-              })
-            }
-          })
-          this.worker.postMessage({ type: 'setup' })
-        })
+      if (this.worker) {
+        this.worker.terminate()
       }
+      import('worker-loader?inline=true!../FreeJS/Physics.worker.js').then(mod => {
+        let PhysicsWorkerScript = mod.default
+        this.worker = new PhysicsWorkerScript()
+        this.worker.addEventListener('message', (evt) => {
+          let data = evt.data
+
+          let type = data.type
+          let db = data.db
+
+          if (type === 'update' && db) {
+            db.forEach((entry) => {
+              let box = this.boxes.find(b => b._id === entry._id)
+              if (box) {
+                box.position = entry.position
+                box.quaternion = entry.quaternion
+                // console.log(entry.quaternion)
+              }
+            })
+          }
+        })
+        this.worker.postMessage({ type: 'setup' })
+      })
     },
     setupControl () {
       var control = new THREE.OrbitControls(this.camera, this.renderer.domElement)

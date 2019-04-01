@@ -23,7 +23,9 @@ export default {
     rotation: {
       deep: true,
       handler (v) {
-        this.obj3D.rotation.copy(v)
+        this.obj3D.rotation.x = v.x
+        this.obj3D.rotation.y = v.y
+        this.obj3D.rotation.z = v.z
       }
     },
     quaternion: {
