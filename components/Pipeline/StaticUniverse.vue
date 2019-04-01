@@ -10,9 +10,9 @@
         </PhysicsItem>
       </Object3D>
 
-      <PhysicsItem v-if="world" :size="{ x: 250, y: 5, z: 250 }" :move="false" :id="'_floor'" :geo="'box'" :bodies="bodies" :world="world">
+      <PhysicsItem v-if="world" :size="{ x: 300, y: 5, z: 300 }" :move="false" :id="'_floor'" :geo="'box'" :bodies="bodies" :world="world">
         <Object3D :position="{ x: 0, y: 0, z: 5 }" :quaternion="{ x: 0.0, y: 0.0, z: 0.2, w: 0.8 }">
-          <Box :size="{ x: 250, y: -4.5, z: 250 }" :color="{ x: 0.12, y: 0.12, z: 0.12 }"></Box>
+          <Box :size="{ x: 300, y: -4.5, z: 300 }" :color="{ x: 0.12, y: 0.12, z: 0.12 }"></Box>
         </Object3D>
       </PhysicsItem>
 
@@ -85,8 +85,8 @@ export default {
         _id: getRD(),
         geo: 'box',
         move: true,
-        size: { x: 1, y: 50, z: 1 },
-        quaternion: { x: 0, y: 0, z: 0, w: 0.0 },
+        size: { x: 40, y: 4, z: 4 },
+        quaternion: { x: Math.random(), y: Math.random(), z: Math.random(), w: 0.0 },
         position: { x: -50 + 100 * Math.random(), y: -50 + 100 * Math.random() + 200 + 1000 * Math.random(), z: -50 + 100 * Math.random() },
       })
     }
