@@ -85,9 +85,8 @@ export default {
         _id: getRD(),
         geo: 'box',
         move: true,
-        size: { x: 10 + Math.random() * -5, y: 10 + Math.random() * -5, z: 10 + Math.random() * -5 },
-        quaternion: { x: Math.random(), y: 0, z: 0, w: 0.9 },
-
+        size: { x: 1, y: 50, z: 1 },
+        quaternion: { x: 0, y: 0, z: 0, w: 0.0 },
         position: { x: -50 + 100 * Math.random(), y: -50 + 100 * Math.random() + 200 + 1000 * Math.random(), z: -50 + 100 * Math.random() },
       })
     }
@@ -118,33 +117,6 @@ export default {
         info: false,   // calculate statistic or not
         gravity: [0,-9.8,0]
       })
-
-      // if (this.world) {
-      //   this.world.terminate()
-      // }
-
-      // import('world-loader?inline=true!../FreeJS/Physics.world.js').then(mod => {
-      //   let PhysicsWorkerScript = mod.default
-      //   this.world = new PhysicsWorkerScript()
-      //   this.world.addEventListener('message', (evt) => {
-      //     let data = evt.data
-
-      //     let type = data.type
-      //     let db = data.db
-
-      //     if (type === 'update' && db) {
-      //       db.forEach((entry) => {
-      //         let box = this.boxes.find(b => b._id === entry._id)
-      //         if (box) {
-      //           box.position = entry.position
-      //           box.quaternion = entry.quaternion
-      //           // console.log(entry.quaternion)
-      //         }
-      //       })
-      //     }
-      //   })
-      //   this.world.postMessage({ type: 'setup' })
-      // })
     },
     setupControl () {
       var control = new THREE.OrbitControls(this.camera, this.renderer.domElement)

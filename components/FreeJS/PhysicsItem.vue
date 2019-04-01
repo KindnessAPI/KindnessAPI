@@ -24,7 +24,7 @@ export default {
       }
     },
     density: {
-      default: 5.0
+      default: 1.0
     },
     friction: {
       default: 0.2
