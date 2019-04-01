@@ -76,6 +76,8 @@ module.exports = {
     extend(config, ctx) {
       // Run ESLint on save
       if (ctx.isDev && ctx.isClient) {
+        // make worker work, window is not defined fix.
+        config.output.globalObject = 'this'
         config.module.rules.push({
           enforce: 'pre',
           test: /\.(js|vue)$/,

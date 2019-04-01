@@ -28,7 +28,9 @@
     "material-design-icons": "^3.0.1",
     "muse-ui": "^3.0.2",
     "nuxt": "^2.3.4",
+    "oimo": "^1.0.9",
     "raw-loader": "^1.0.0",
+    "screenfull": "^4.2.0",
     "three": "^0.101.1",
     "vue2-hammer": "^2.1.2"
   },
@@ -52,6 +54,8 @@
     "node-sass": "^4.11.0",
     "nodemon": "^1.18.9",
     "sass-loader": "^7.1.0",
-    "vue2-ace-editor": "0.0.13"
+    "vue2-ace-editor": "0.0.13",
+    "worker-loader": "^2.0.0",
+    "workerize-loader": "^1.0.4"
   }
 }

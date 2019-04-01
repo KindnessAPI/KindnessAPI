@@ -14,6 +14,7 @@ export const setup = () => {
   // var bitsArr = new Array(dataPerScan * maxHistory * 3)
   var historyArr = [
   ]
+
   for (var i = 0; i < maxHistory; i++) {
     historyArr.push(new Uint8Array(new Array(dataPerScan)))
   }
