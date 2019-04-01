@@ -6,17 +6,17 @@
           Start
         </button>
       </div>
-      <RoyalUniverse v-if="ready" />
+      <StaticUniverse v-if="ready" />
     </no-ssr>
   </div>
 </template>
 
 <script>
 import screenfull from 'screenfull'
-import RoyalUniverse from '@/components/Pipeline/RoyalUniverse.vue'
+import StaticUniverse from '@/components/Pipeline/StaticUniverse.vue'
 export default {
   components: {
-    RoyalUniverse
+    StaticUniverse
   },
   data () {
     return {

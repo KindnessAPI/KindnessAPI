@@ -1,5 +1,4 @@
 import * as OIMO from 'oimo'
-import { SlidePicker } from 'muse-ui';
 
 var bodies = [
 
