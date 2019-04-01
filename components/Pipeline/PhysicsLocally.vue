@@ -44,6 +44,9 @@ let getRD = () => {
 }
 
 export default {
+  props: {
+    toucher: {}
+  },
   components: {
     ...FreeJS,
     Box

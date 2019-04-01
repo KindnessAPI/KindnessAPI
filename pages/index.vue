@@ -1,12 +1,12 @@
 <template>
-  <div class="full posrel" ref="entryDOM">
+  <div class="full posrel base-div" ref="entryDOM">
     <no-ssr placeholder="Loading...">
-      <div class="mic" v-if="!ready">
+      <!-- <div class="mic" v-if="!ready">
         <button @click="onStart">
           Start
         </button>
-      </div>
-      <PhysicsLocally v-if="ready" :toucher="$refs['toucher']" />
+      </div> -->
+      <PhysicsLocally :toucher="$refs['toucher']" />
     </no-ssr>
     <div class="full posabs" :ref="'toucher'">
       <div class="my-wrapper">
@@ -70,6 +70,13 @@ export default {
 }
 </script>
 
+<style>
+body,html{
+  background-color: black;
+}
+</style>
+
+
 <style scoped>
 .full{
   width: 100%;
@@ -84,6 +91,10 @@ export default {
   left: 0px;
   transform: translateZ(10px);
 }
+.base-div{
+  background-color: black;
+}
+
 .my-wrapper{
   width: 100%;
   height: 100%;
