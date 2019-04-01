@@ -4,7 +4,7 @@
 
       <Object3D v-if="worker">
         <PhysicsPass :size="oo.size" :move="oo.move" :id="oo._id" :geo="oo.geo" :physics="worker"  :key="oo._id" v-for="oo in boxes">
-          <Object3D :position="oo.position">
+          <Object3D :quaternion="oo.quaternion" :position="oo.position">
             <Box :size="oo.size"></Box>
           </Object3D>
         </PhysicsPass>
@@ -55,6 +55,7 @@ export default {
           geo: 'box',
           move: true,
           size: { x: 20, y: 22, z: 20 },
+          quaternion: { x: 0, y: 0, z: 0, w: 0 },
           position: { x: 0, y: 40, z: 0 },
         },
         {
@@ -62,6 +63,7 @@ export default {
           geo: 'box',
           move: true,
           size: { x: 20, y: 22, z: 20 },
+          quaternion: { x: 0, y: 0, z: 0, w: 0 },
           position: { x: 0, y: 20, z: 0 },
         },
         {
@@ -69,6 +71,7 @@ export default {
           geo: 'box',
           move: true,
           size: { x: 20, y: 22, z: 20 },
+          quaternion: { x: 0, y: 0, z: 0, w: 0 },
           position: { x: 0, y: 0, z: 0 },
         },
         {
@@ -76,13 +79,15 @@ export default {
           geo: 'box',
           move: true,
           size: { x: 20, y: 22, z: 20 },
+          quaternion: { x: 0, y: 0, z: 0, w: 0 },
           position: { x: 0, y: -20, z: 0 },
         },
         {
           _id: getRD(),
           geo: 'box',
-          move: false,
-          size: { x: 20, y: 20, z: 20 },
+          move: true,
+          size: { x: 20, y: 22, z: 20 },
+          quaternion: { x: 0, y: 0, z: 0, w: 0 },
           position: { x: 0, y: -40, z: 0 },
         }
       ],
@@ -155,10 +160,22 @@ export default {
         import('worker-loader?inline=true!../FreeJS/Physics.worker.js').then(mod => {
           let PhysicsWorkerScript = mod.default
           this.worker = new PhysicsWorkerScript()
-          // this.worker.addEventListener('message', (evt) => {
-          //   let data = evt.data
-          //   let type = data.type
-          // })
+          this.worker.addEventListener('message', (evt) => {
+            let data = evt.data
+
+            let type = data.type
+            let db = data.db
+
+            if (type === 'update' && db) {
+              db.forEach((entry) => {
+                let box = this.boxes.find(b => b._id === entry._id)
+                if (box) {
+                  box.position = entry.position
+                  box.quaternion = entry.quaternion
+                }
+              })
+            }
+          })
           this.worker.postMessage({ type: 'setup' })
         })
       }

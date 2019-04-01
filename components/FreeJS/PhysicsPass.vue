@@ -74,21 +74,22 @@ export default {
     })
   },
   mounted () {
-    this.physics.addEventListener('message', (evt) => {
-      let data = evt.data
+    // this.physics.addEventListener('message', (evt) => {
+    //   let data = evt.data
 
-      let type = data.type
-      let db = data.db
-      if (type === 'update' && db) {
-        let index = db.findIndex(b => b._id === this.id)
-        if (index !== -1) {
-          let info = db[index]
-          //
-          this.obj3D.position.copy(info.position)
-          this.obj3D.quaternion.copy(info.quaternion)
-        }
-      }
-    })
+    //   let type = data.type
+    //   let db = data.db
+
+    //   if (type === 'update' && db) {
+    //     let index = db.findIndex(b => b._id === this.id)
+    //     if (index !== -1) {
+    //       let info = db[index]
+    //       //
+    //       this.obj3D.position.copy(info.position)
+    //       this.obj3D.quaternion.copy(info.quaternion)
+    //     }
+    //   }
+    // })
   },
   beforeDestroy () {
   }
